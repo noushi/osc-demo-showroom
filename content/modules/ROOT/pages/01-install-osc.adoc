@@ -11,9 +11,11 @@ There are two ways to install the operator:
 . In the **Filter by keyword field**, type `OpenShift sandboxed containers`.
 . Click on the **OpenShift sandboxed containers Operator** tile.
 +
-image::01-operatorhub-ui.png[link=self, window=blank, width=30%]
+image::01-operatorhub-ui.png[link=self, window=blank]
 
 . On the **Install Operator** page, select **stable** from the list of available **Update Channel** options.
++
+image::02-install-ui.png[link=self, window=blank]
 
 . Verify that **Operator recommended Namespace** is selected for **Installed Namespace**. This installs the Operator in the mandatory openshift-sandboxed-containers-operator namespace. If this namespace does not yet exist, it is automatically created.
 
@@ -22,6 +24,8 @@ NOTE: Attempting to install the OpenShift sandboxed containers Operator in a nam
 . Verify that **Automatic** is selected for **Approval Strategy**. **Automatic** is the default value, and enables automatic updates to OpenShift sandboxed containers when a new z-stream release is available.
 
 . Click **Install**.
++
+image::03-install-ui.png[link=self, window=blank]
 
 The OpenShift sandboxed containers Operator is now installed on your cluster.
 
@@ -29,10 +33,26 @@ The OpenShift sandboxed containers Operator is now installed on your cluster.
 
 . Navigate to **Operators > Installed Operators**.
 . Verify that the OpenShift sandboxed containers Operator is displayed.
++
+image::04-install-ui.png[link=self, window=blank]
 
 [#cmdline]
 == Using the command line
-asfdsdsa
+
+. Create and apply a `Namespace.yaml` manifest file:
++
+[source,sh,role=execute]
+----
+echo "apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-sandboxed-containers-operator" > Namespace.yaml
+----
++
+[source,sh,role=execute]
+----
+oc apply -f Namespace.yaml
+----
 
 == Downloading the UBI
 
