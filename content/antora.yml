@@ -1,19 +1,18 @@
 name: modules
-title: Default Title
+title: Openshift Sandboxed Containers Setup Demo
 version: master
 nav:
   - modules/ROOT/nav.adoc
 
 asciidoc:
   attributes:
-    lab_name: "I'm the lab_name var"
+    lab_name: "Openshift Sandboxed Containers Setup Demo"
     release-version: master
     page-pagination: true
-    my_var: "foo"
+    openshift_cluster_admin_password: placehoder_openshift_admin_password
+    openshift_cluster_admin_username: placehoder_openshift_admin_user
+    openshift_cluster_console_url: placehoder_openshift_web_console
     guid: my-guid
-    ssh_user: devops
-    ssh_password: devops
-    ssh_command: ssh someone@example.com
-    page-links:
-    - url: https://redhat.com
-      text: Red Hat
+    ssh_user: placeholder_ssh_username
+    ssh_password: placeholder_ssh_password
+    ssh_command: ssh placeholder@example.com

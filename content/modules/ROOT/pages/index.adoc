@@ -1,29 +1,31 @@
 = {lab_name}
 
-The `lab_name` var, known as an asciidoc attribute, above was set in `./content/antora.yml` and can be used to set the lab_name or title of your content.
-You are both free to change its value and if you prefer to use a different var name, you can change the value of `lab_name`, for example to `title` in `./content/antora.yml` and then reference it in your content as `\{title}`. +
+OpenShift sandboxed containers support for Red Hat OpenShift provides you with built-in support for running Kata Containers as an additional optional runtime. The new runtime supports containers in dedicated virtual machines (VMs), providing improved workload isolation. This is particularly useful for performing the following tasks:
 
-image::rhel-logo-black.jpg[rhel-logo-black,55%,55%]
+* Run privileged or untrusted workloads
+* Ensure kernel isolation for each workload
+* Share the same workload across tenants
+* Ensure proper isolation and sandboxing for testing software
+* Ensure default resource containment through VM boundaries
 
-== Variables
+Please refer to https://docs.redhat.com/en/documentation/openshift_sandboxed_containers[Openshift sandboxedcontainers official documentation] for more information.
 
-Other vars can also be set there, such as `ssh_user` and `ssh_password`, and referenced inline in the lab content by using the `\{foo}` syntax.
+This workshop will show how to set up the OSC operator and run a simple hello-world container running with the kata-remote runtime class, which is the result of the peer-pods technology offered by the operator in the cloud.
 
-This is another var, or asciidoc attribute, from `./content/antora.yml` {my_var}
+The peer-pods solution extends Red Hat OpenShift sandboxed containers (OSC) to run on any environment without requiring bare-metal servers or nested virtualization support. It does this by extending Kata containers runtime (which OSC is built on) to handle VM lifecycle management using cloud provider APIs (AWS, Azure, etc...) or third-party hypervisors APIs (such as VMware vSphere). More info on the peer pods solution is available https://www.redhat.com/en/blog/red-hat-openshift-sandboxed-containers-peer-pods-solution-overview[here].
 
-== Writing your lab
 
-Whatever type of content you are writing we'll refer to your *content* as "your lab" in this document.
+== Setting up the environment
 
-=== Lab structure
+. Navigate to the link:{openshift_cluster_console_url}[OpenShift Console^]
 
-Wether you are writing a lab
+. Login as administrator:
+* *Username:* {openshift_cluster_admin_username}
+* *Password:* {openshift_cluster_admin_password}
++
 
-* First, we will build a monolithic application already compiled as RPM packages and put it into a container. This will allow us to deploy the application, copy it between machines, and update it separately from the operating system. This process affords us a portable and easily maintained component instead of tightly coupling the application with your operating system maintenance.
 
-* In closing we will build a second container on a different operating system version that makes an application not packaged into RPMs. This will be similar to a web application deployment, positioning the correct files at the right locations. To do this, we will pull a project from GitHub and position the component files within our container image. The purpose of this is to achieve a portable application container that can deploy on several different versions of Red Hat Enterprise Linux. This also provides the benefit of decoupling your application maintenance, which would all happen by building new containers versus operating system maintenance. The container is no longer reliant on the operating system installed on the machine where the application is deployed.
-
-. Now let's examine this cluster a bit more by describing the cluster (the `$GUID` environment variable is already set for you so you can immediately describe your individual cluster):
+<!-- . Now let's examine this cluster a bit more by describing the cluster (the `$GUID` environment variable is already set for you so you can immediately describe your individual cluster):
 +
 [source,sh,role=execute]
 ----
@@ -39,5 +41,5 @@ CONTAINER ID  IMAGE                        COMMAND           CREATED      STATUS
 
 === Lab Access
 
-The terminal window to your right is *already* logged into the lab environment as the `{ssh_user}` user via `ssh`. 
-All steps of this lab are to be completed as the `{ssh_user}` user.
+The terminal window to your right is *already* logged into the lab environment as the `{ssh_user}` user via `ssh`.
+All steps of this lab are to be completed as the `{ssh_user}` user. -->

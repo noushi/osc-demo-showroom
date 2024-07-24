@@ -1,4 +1,38 @@
-= Building an Application with rpms
+= Install the operator
+
+There are two ways to install the operator:
+
+* xref:01-install-osc.adoc#webui[Install the operator using the web interface]
+* xref:01-install-osc.adoc#cmdline[Install the operator using the command line]
+
+[#webui]
+== Using the web interface
+. In the OpenShift Container Platform web console, navigate to **Operators** > OperatorHub.
+. In the **Filter by keyword field**, type `OpenShift sandboxed containers`.
+. Click on the **OpenShift sandboxed containers Operator** tile.
++
+image::01-operatorhub-ui.png[link=self, window=blank, width=30%]
+
+. On the **Install Operator** page, select **stable** from the list of available **Update Channel** options.
+
+. Verify that **Operator recommended Namespace** is selected for **Installed Namespace**. This installs the Operator in the mandatory openshift-sandboxed-containers-operator namespace. If this namespace does not yet exist, it is automatically created.
+
+NOTE: Attempting to install the OpenShift sandboxed containers Operator in a namespace other than `openshift-sandboxed-containers-operator` causes the installation to fail.
+
+. Verify that **Automatic** is selected for **Approval Strategy**. **Automatic** is the default value, and enables automatic updates to OpenShift sandboxed containers when a new z-stream release is available.
+
+. Click **Install**.
+
+The OpenShift sandboxed containers Operator is now installed on your cluster.
+
+=== Verification
+
+. Navigate to **Operators > Installed Operators**.
+. Verify that the OpenShift sandboxed containers Operator is displayed.
+
+[#cmdline]
+== Using the command line
+asfdsdsa
 
 == Downloading the UBI
 
