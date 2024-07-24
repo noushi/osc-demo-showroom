@@ -6,6 +6,7 @@ Now that the operator is installed, we need to set it up.
 To complete this section, it is mandatory to have all ARO credentials at hand, because they will have to be inserted in the various resources that we are going to create.
 
 NOTE: All the below yaml files could be also created in the web UI by clicking on the **Import yaml** button in the top bar on the right.
+
 image::05-bar.png[link=self, window=blank]
 
 [#webui]
