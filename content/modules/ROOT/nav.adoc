@@ -1,9 +1,13 @@
-* xref:index.adoc[1. Introduction]
+* xref:index.adoc[Introduction]
 
-* xref:01-install-osc.adoc[2. Install the operator]
-** xref:01-install-osc.adoc#webui[Via web UI]
-** xref:01-install-osc.adoc#cmdline[Via command line]
+* xref:01-install-osc.adoc[1. Install the operator]
+** xref:01-install-osc.adoc#webui[Web UI]
+** xref:01-install-osc.adoc#cmdline[Command line]
 
-* xref:module-02.adoc[2. GitHub Sourced Container]
-** xref:module-02.adoc#prerequisites[Install Prerequisites]
-** xref:module-02.adoc#container[Enable Container]
+* xref:02-configure-osc.adoc[2. Configure the operator]
+** xref:02-configure-osc.adoc#pp-secret[Create the peer-pods secret]
+** xref:02-configure-osc.adoc#pp-cm[Create the peer-pods configmap]
+** xref:02-configure-osc.adoc#pp-key[Create the SSH key]
+** xref:02-configure-osc.adoc#pp-key[Create the KataConfig]
+
+* xref:02-configure-osc.adoc[3. Deploy a sample pod]

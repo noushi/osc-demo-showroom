@@ -22,24 +22,9 @@ The peer-pods solution extends Red Hat OpenShift sandboxed containers (OSC) to r
 . Login as administrator:
 * *Username:* {openshift_cluster_admin_username}
 * *Password:* {openshift_cluster_admin_password}
-+
 
-
-<!-- . Now let's examine this cluster a bit more by describing the cluster (the `$GUID` environment variable is already set for you so you can immediately describe your individual cluster):
-+
-[source,sh,role=execute]
-----
-podman ps
-----
-+
-.Sample Output
-[source,texinfo,subs="attributes"]
-----
-CONTAINER ID  IMAGE                        COMMAND           CREATED      STATUS      PORTS                 NAMES
-2dcfee9e50c4  docker.io/library/httpd:2.4  httpd-foreground  3 hours ago  Up 3 hours  0.0.0.0:8080->80/tcp  showroom-httpd
-----
-
-=== Lab Access
-
-The terminal window to your right is *already* logged into the lab environment as the `{ssh_user}` user via `ssh`.
-All steps of this lab are to be completed as the `{ssh_user}` user. -->
+. Write down your Azure credentials:
+* *AZURE_CLIENT_ID:*
+* *AZURE_CLIENT_SECRET:*
+* *AZURE_TENANT_ID:*
+* *AZURE_SUBSCRIPTION_ID:*
