@@ -1,0 +1,15 @@
+= Conclusion and what's next
+
+**Congratulations!**
+
+Now you have successfully learned how to install and set up the **Openshift Sandboxed Containers** operator on **ARO**, and are capable of running any pod in a virtual machine!
+
+If you have any question or are interested to know more about OSC, please feel free to ping us on `#forum-sandboxed-containers` on Slack!
+
+Next guides will cover:
+* How to attach a GPU to a pod VM in ARO
+* How to install the `Trustee` operator to perform attestation and safely retrieve secrets for Confidential Containers
+* How to run a Confidential Container on ARO
+* How to protect the fraud detection demo with Confidential Containers on ARO
+
+**Thank you for taking the time to explore OSC!**

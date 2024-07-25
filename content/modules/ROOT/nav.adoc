@@ -8,6 +8,11 @@
 ** xref:02-configure-osc.adoc#pp-secret[Create the peer-pods secret]
 ** xref:02-configure-osc.adoc#pp-cm[Create the peer-pods configmap]
 ** xref:02-configure-osc.adoc#pp-key[Create the SSH key]
-** xref:02-configure-osc.adoc#pp-key[Create the KataConfig]
+** xref:02-configure-osc.adoc#pp-kc[Create the KataConfig]
 
-* xref:02-configure-osc.adoc[3. Deploy a sample pod]
+* xref:03-deploy-workload.adoc[3. Deploy a sample pod]
+* xref:03-deploy-workload.adoc#options[Available options]
+* xref:03-deploy-workload.adoc#example[Hello-world example]
+* xref:03-deploy-workload.adoc#verify[Verify the pod is in a VM]
+
+* xref:04-conclusion.adoc[4. Conclusion and what's next]
