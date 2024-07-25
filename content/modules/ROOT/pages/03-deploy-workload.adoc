@@ -123,7 +123,7 @@ oc expose service hello-openshift-service -l app=hello-openshift
 APP_URL=$(oc get routes/hello-openshift-service -o jsonpath='{.spec.host}')
 ----
 
-. And try to connect to the pod. It should print `Hello OpenShift!`.
+. And try to connect to the pod. It should print `Hello Openshift!`.
 +
 [source,sh,role=execute]
 ----

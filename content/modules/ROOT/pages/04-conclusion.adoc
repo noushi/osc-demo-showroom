@@ -2,7 +2,7 @@
 
 **Congratulations!**
 
-Now you have successfully learned how to install and set up the **Openshift Sandboxed Containers** operator on **ARO**, and are capable of running any pod in a virtual machine!
+Now you have successfully learned how to install and set up the **Openshift sandboxed containers** operator on **ARO**, and are capable of running any pod in a virtual machine!
 
 If you have any question or are interested to know more about OSC, please feel free to ping us on `#forum-sandboxed-containers` on Slack!
 

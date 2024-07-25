@@ -73,7 +73,7 @@ ARO_REGION=$(oc get secret -n kube-system azure-credentials -o jsonpath="{.data.
 # ie the one starting with "aro-".
 ARO_VNET_NAME=$(az network vnet list --resource-group $AZURE_RESOURCE_GROUP --query "[0].{Name:name}" --output tsv)
 
-# Get the OpenShift worker subnet ip address cidr. This exists in the admin created RG
+# Get the Openshift worker subnet ip address cidr. This exists in the admin created RG
 ARO_WORKER_SUBNET_ID=$(az network vnet subnet list --resource-group $AZURE_RESOURCE_GROUP --vnet-name $ARO_VNET_NAME --query "[].{Id:id} | [? contains(Id, 'worker')]" --output tsv)
 
 ARO_NSG_ID=$(az network nsg list --resource-group $ARO_RESOURCE_GROUP --query "[].{Id:id}" --output tsv)
@@ -164,15 +164,15 @@ oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operat
 
 You must create a `KataConfig` custom resource (CR) to install `kata-remote` as a runtime class on your worker nodes. This is a core operation that enables the worker nodes to create VMs.
 
-Creating the `KataConfig` CR triggers the OpenShift sandboxed containers Operator to create a `RuntimeClass` CR named `kata-remote` with a default configuration. This enables users to configure workloads to use `kata-remote` as the runtime by referencing the CR in the `RuntimeClassName` field. This CR also specifies the resource overhead for the runtime.
+Creating the `KataConfig` CR triggers the Openshift sandboxed containers Operator to create a `RuntimeClass` CR named `kata-remote` with a default configuration. This enables users to configure workloads to use `kata-remote` as the runtime by referencing the CR in the `RuntimeClassName` field. This CR also specifies the resource overhead for the runtime.
 
-OpenShift sandboxed containers installs `kata-remote` as a _secondary, optional_ runtime on the cluster and not as the primary runtime.
+Openshift sandboxed containers installs `kata-remote` as a _secondary, optional_ runtime on the cluster and not as the primary runtime.
 
 [IMPORTANT]
 ====
 Creating the KataConfig CR automatically reboots the worker nodes. According with the documentation, the reboot can take from 10 to more than 60 minutes. **In this ARO workshop, it should take around 15 minutes**. Factors that impede reboot time are as follows:
 
-* A larger OpenShift Container Platform deployment with a greater number of worker nodes.
+* A larger Openshift Container Platform deployment with a greater number of worker nodes.
 * Activation of the BIOS and Diagnostics utility.
 * Deployment on a hard disk drive rather than an SSD.
 * Deployment on physical nodes such as bare metal, rather than on virtual nodes.

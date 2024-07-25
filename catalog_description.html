@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Understanding Openshift sandboxed containers - Workshop on ARO</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+	<h1>
+		Understanding Openshift sandboxed containers - Workshop on ARO
+	</h1>
+	<p>
+		Openshift sandboxed containers support for Red Hat Openshift provides you with built-in support for running Kata containers as an additional optional runtime. The new runtime supports containers in dedicated virtual machines (VMs), providing improved workload isolation. This is particularly useful for performing the following tasks:
+	</p>
+	<ul>
+		<li>Run privileged or untrusted workloads</li>
+		<li>Ensure kernel isolation for each workload</li>
+		<li>Share the same workload across tenants</li>
+		<li>Ensure proper isolation and sandboxing for testing software</li>
+		<li>Ensure default resource containment through VM boundaries</li>
+	</ul>
+	<p>
+		This workshop will show how to set up the OSC operator and run a simple hello-openshift container running with the kata-remote runtime class, which is the result of the peer-pods technology offered by the operator in the cloud.
+	</p>
+	<p>
+		The peer-pods solution extends Red Hat Openshift sandboxed containers (OSC) to run on any environment without requiring bare-metal servers or nested virtualization support. It does this by extending Kata containers runtime (which OSC is built on) to handle VM lifecycle management using cloud provider APIs (AWS, Azure, etc...) or third-party hypervisors APIs (such as VMware vSphere). More info on the peer pods solution is available <a href="https://www.redhat.com/en/blog/red-hat-openshift-sandboxed-containers-peer-pods-solution-overview">here</a>.
+	</p>
+</body>
+</html>

@@ -1,12 +1,12 @@
 name: modules
-title: Openshift Sandboxed Containers Setup Demo
+title: Openshift sandboxed containers Setup Demo
 version: master
 nav:
   - modules/ROOT/nav.adoc
 
 asciidoc:
   attributes:
-    lab_name: "Openshift Sandboxed Containers Setup Demo"
+    lab_name: "Openshift sandboxed containers Setup Demo"
     release-version: master
     page-pagination: true
     aro_console: https://placehoder_openshift_web_console
