@@ -3,6 +3,10 @@
 Now that the everything is ready, we can run a sample workload.
 Let's first see what we can and must add into the pod yaml to make it run in a VM.
 
+NOTE: All **yaml** files in this section could be also created in the web UI by clicking on the **Import yaml** button in the top bar on the right (circled in red in the image below). Importing a yaml in this way corresponds to creating a `.yaml` file and applying it with `oc apply -f`. Because we are going to perform also other command-line operations, like fetching ARO credentials, we will perform all operations via command line. Note that this does not apply for `az` or `bash` (`cat`, `oc`) commands
+
+image::05-bar.png[link=self, window=blank]
+
 [#options]
 == Available options
 
@@ -50,7 +54,7 @@ metadata:
 
 [#example]
 == Hello world example
-This is a sample pod that runs a the template default `hello-openshift`.
+This is a sample yaml that runs an `hello-openshift` pod. This pod acts as server and outputs `"Hello Openshift!"` every time is reached.
 
 . Create and apply the yaml file.
 +
@@ -103,6 +107,7 @@ oc apply -f sample-openshift.yaml
 ----
 
 . Wait that the pod is created.
++
 [source,sh,role=execute]
 ----
 watch oc get pods/hello-openshift
@@ -110,8 +115,23 @@ watch oc get pods/hello-openshift
 +
 The pod is ready when the `STATUS` is in `Running`.
 
+. Now expose the pod to make it reachable:
++
+[source,sh,role=execute]
+----
+oc expose service hello-openshift-service -l app=hello-openshift
+APP_URL=$(oc get routes/hello-openshift-service -o jsonpath='{.spec.host}')
+----
+
+. And try to connect to the pod. It should print `Hello OpenShift!`.
++
+[source,sh,role=execute]
+----
+curl ${APP_URL}
+----
+
 [#verify]
-=== Verify that the pod is running in a VM
+== Verify that the pod is running in a VM
 How to be sure that all what we did so far is actually running in a VM? There are several ways to check this.
 
 . Via ARO web UI.
@@ -226,6 +246,7 @@ ssh peerpod@10.0.2.10 uname -r
 ----
 +
 Expected output:
++
 [source,texinfo,subs="attributes"]
 ----
 # uname -r
@@ -238,3 +259,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Failed to add the host to the list of known hosts (/root/.ssh/known_hosts).
 5.14.0-362.8.1.el9_3.x86_64 # <----------------
 ----
+
+[#destroy]
+== Destroy the hello-openshift pod
+The `hello-openshift` pod is no different from any other pod, therefore it can be destroyed just as the others (via command line, web ui, etc.). Behind the scenes, the operator will make sure that the created VM will also be completely deallocated.

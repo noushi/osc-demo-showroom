@@ -11,8 +11,9 @@
 ** xref:02-configure-osc.adoc#pp-kc[Create the KataConfig]
 
 * xref:03-deploy-workload.adoc[3. Deploy a sample pod]
-* xref:03-deploy-workload.adoc#options[Available options]
-* xref:03-deploy-workload.adoc#example[Hello-world example]
-* xref:03-deploy-workload.adoc#verify[Verify the pod is in a VM]
+** xref:03-deploy-workload.adoc#options[Available options]
+** xref:03-deploy-workload.adoc#example[Hello-openshift example]
+** xref:03-deploy-workload.adoc#verify[Verify the pod is in a VM]
+** xref:03-deploy-workload.adoc#destroy[Destroy the hello-openshift pod]
 
 * xref:04-conclusion.adoc[4. Conclusion and what's next]

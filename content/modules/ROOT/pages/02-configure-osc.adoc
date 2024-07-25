@@ -3,11 +3,8 @@
 Now that the operator is installed, we need to set it up.
 
 **Prerequisites**
+
 To complete this section, it is mandatory to have all ARO credentials at hand defined in the xref:index.adoc#credentials[introduction], because they will have to be inserted in the various resources that we are going to create.
-
-NOTE: All yaml files in this section could be also created in the web UI by clicking on the **Import yaml** button in the top bar on the right (circled in red in the image below). Because we are going to perform also other command-line operations, like fetching ARO credentials, we will perform all operations via command line.
-
-image::05-bar.png[link=self, window=blank]
 
 [#pp-secret]
 == Create the peer-pods secret
@@ -15,7 +12,7 @@ The OSC operator must have access to the ARO credentials in order to create VMs.
 
 Currently we are using the azure-credentials secret from the kube-system namespace which has the required permissions to call Azure API to create VM, fetch images, join networks, create image gallery and definition in the ARO managed group.
 
-. Get the necessary credentials
+. Get the necessary credentials.
 +
 [source,sh,role=execute]
 ----
@@ -124,7 +121,7 @@ oc apply -f pp-secret.yaml
 +
 NOTE: As you might have noticed, `AZURE_IMAGE_ID` is purposefully left empty. It will be filled in automatically by a Job created by the operator later.
 +
-[IMPORTANT]
+[NOTE]
 ====
 If you later update the peer pods config map, you must restart the peerpodconfig-ctrl-caa-daemon daemonset to apply the changes.
 After you update the config map, apply the manifest. Then restart the cloud-api-adaptor pods by running the following command:
@@ -162,15 +159,6 @@ oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operat
 oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operator --from-file=id_rsa.pub=./id_rsa.pub --from-file=id_rsa=./id_rsa
 ----
 
-
-**Workshop-only: upload also the private key into the secret**
-For the purpose of this workshop, and since we are later going to ssh into the pod VM, we need to also upload `id_rsa`. This is not intended for production purposes, since whoever has the key can ssh into the pod VM.
-
-[source,sh,role=execute]
-----
-oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operator --from-file=id_rsa.pub=./id_rsa.pub --from-file=id_rsa=./id_rsa
-----
-
 [#pp-kc]
 == Create the peer-pods KataConfig
 
@@ -182,7 +170,7 @@ OpenShift sandboxed containers installs `kata-remote` as a _secondary, optional_
 
 [IMPORTANT]
 ====
-Creating the KataConfig CR automatically reboots the worker nodes. The reboot can take from 10 to more than 60 minutes. Factors that impede reboot time are as follows:
+Creating the KataConfig CR automatically reboots the worker nodes. According with the documentation, the reboot can take from 10 to more than 60 minutes. **In this ARO workshop, it should take around 15 minutes**. Factors that impede reboot time are as follows:
 
 * A larger OpenShift Container Platform deployment with a greater number of worker nodes.
 * Activation of the BIOS and Diagnostics utility.
@@ -256,6 +244,7 @@ oc get -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daem
 ----
 +
 Expected output:
++
 [source,texinfo,subs="attributes"]
 ----
 NAME                            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR                      AGE
@@ -270,6 +259,7 @@ oc get runtimeclass
 ----
 +
 Expected output:
++
 [source,texinfo,subs="attributes"]
 ----
 NAME             HANDLER          AGE

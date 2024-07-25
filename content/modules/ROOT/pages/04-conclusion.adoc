@@ -7,6 +7,7 @@ Now you have successfully learned how to install and set up the **Openshift Sand
 If you have any question or are interested to know more about OSC, please feel free to ping us on `#forum-sandboxed-containers` on Slack!
 
 Next guides will cover:
+
 * How to attach a GPU to a pod VM in ARO
 * How to install the `Trustee` operator to perform attestation and safely retrieve secrets for Confidential Containers
 * How to run a Confidential Container on ARO

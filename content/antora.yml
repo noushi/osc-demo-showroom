@@ -9,7 +9,7 @@ asciidoc:
     lab_name: "Openshift Sandboxed Containers Setup Demo"
     release-version: master
     page-pagination: true
-    aro_console: placehoder_openshift_web_console
+    aro_console: https://placehoder_openshift_web_console
     azure_resource_group: placeholder_resource_group
     aro_kube_username: kubeadmin
     aro_kube_password: placehoder_openshift_admin_password

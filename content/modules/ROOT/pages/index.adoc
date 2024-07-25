@@ -17,7 +17,7 @@ The peer-pods solution extends Red Hat OpenShift sandboxed containers (OSC) to r
 [#credentials]
 == Setting up the environment
 
-. Navigate to the console website:{aro_console}[OpenShift Console^]
+. Navigate to the console website: {aro_console}[OpenShift Console]
 
 . Login as administrator:
 * *Username:* {aro_kube_username}
