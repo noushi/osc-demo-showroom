@@ -113,6 +113,7 @@ cat pp-cm.yaml
 ----
 +
 IMPORTANT: Note the `AZURE_INSTANCE_SIZES` field. This field is used to specify additional instance sizes that the operator should support. By default, if not specified all new pod VM will be of type `AZURE_INSTANCE_SIZE`, but if specified in the pod yaml (see xref:03-deploy-worload.adoc#options[here]), it will use one of the types indicated in `AZURE_INSTANCE_SIZES`.
+Azure instance types are explained and listed https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/overview?tabs=breakdownseries%2Cgeneralsizelist%2Ccomputesizelist%2Cmemorysizelist%2Cstoragesizelist%2Cgpusizelist%2Cfpgasizelist%2Chpcsizelist[here]
 +
 [source,sh,role=execute]
 ----
