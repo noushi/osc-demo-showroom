@@ -117,7 +117,7 @@ Azure instance types are explained and listed https://learn.microsoft.com/en-us/
 +
 [source,sh,role=execute]
 ----
-oc apply -f pp-secret.yaml
+oc apply -f pp-cm.yaml
 ----
 +
 NOTE: As you might have noticed, `AZURE_IMAGE_ID` is purposefully left empty. It will be filled in automatically by a Job created by the operator later.

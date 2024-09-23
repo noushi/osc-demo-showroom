@@ -24,5 +24,5 @@ The peer-pods solution extends Red Hat Openshift sandboxed containers (OSC) to r
 * *Password:* {aro_kube_password}
 
 . Go into the terminal on the right. You should be automatically logged into ARO:
-* Check by typing `az account show`
+* Check by typing `az account show`. If it doesn't show an account or provides an error, please run `az login` and follow the instructions to authenticate.
 * Export the `AZURE_RESOURCE_GROUP` variable. It will needed when setting up the operator: `export AZURE_RESOURCE_GROUP={azure_resource_group}`
