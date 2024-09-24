@@ -56,7 +56,7 @@ oc apply -f pp-secret.yaml
 [#pp-cm]
 == Create the peer-pods configmap
 
-. Get the necessary credentials.
+. Get the necessary credentials. In case you didn't do it at the beginning, run
 `AZURE_RESOURCE_GROUP={azure_resource_group}`.
 +
 [source,sh,role=execute]
