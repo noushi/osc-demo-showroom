@@ -136,7 +136,7 @@ How to be sure that all what we did so far is actually running in a VM? There ar
 
 . Via ARO web UI.
   * Go to the https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines/subscriptionId/{azure_subscription}[Azure VM web console,window=_blank] and login. Insert the RH email and proceed with login.
-  * In the `Subscription` filter, pick {aro_sandbox_name}. In this example, it is `pool-01-344`.
+  * In the `Subscription` filter, make sure {aro_sandbox_name} is selected. In this example, it is `pool-01-344`.
 +
 image::06-subscription.png[link=self, window=blank]
   * Look at the various VMs. You will see there are:
