@@ -15,6 +15,7 @@ asciidoc:
     aro_kube_password: placehoder_openshift_admin_password
     aro_sandbox_name: placehoder_aro_sandbox_name
     guid: my-guid
-    ssh_user: placeholder_ssh_username
-    ssh_password: placeholder_ssh_password
-    ssh_command: ssh placeholder@example.com
+    azure_service_principal_id: placeholder_my_client_id
+    azure_service_principal_password: placeholder_my_pw
+    azure_tenant_id: placeholder_my_tenant_id
+    azure_subscription: placeholder_my_subscription

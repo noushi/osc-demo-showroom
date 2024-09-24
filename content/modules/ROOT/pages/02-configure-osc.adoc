@@ -56,13 +56,12 @@ oc apply -f pp-secret.yaml
 [#pp-cm]
 == Create the peer-pods configmap
 
-. Get the necessary credentials. **First, export:**
+. Get the necessary credentials.
+
 `AZURE_RESOURCE_GROUP={azure_resource_group}`.
 +
 [source,sh,role=execute]
 ----
-# AZURE_RESOURCE_GROUP is provided by the ARO infrastructure
-
 # Get the ARO created RG
 ARO_RESOURCE_GROUP=$(oc get infrastructure/cluster -o jsonpath='{.status.platformStatus.azure.resourceGroupName}')
 
