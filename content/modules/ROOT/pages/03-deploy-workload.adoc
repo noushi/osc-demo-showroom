@@ -135,7 +135,7 @@ curl ${APP_URL}
 How to be sure that all what we did so far is actually running in a VM? There are several ways to check this.
 
 . Via ARO web UI.
-  * Go to the https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines/subscriptionId/{azure_subscription}[Azure VM web console, window=blank] and login. Insert the RH email and proceed with login.
+  * Go to the https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines/subscriptionId/{azure_subscription}[Azure VM web console, window=blank] and login. Insert the email associated with your RHDP account and proceed with login.
   * In the `Subscription` filter, make sure {aro_sandbox_name} is selected. In this example, it is `pool-01-344`.
 +
 image::06-subscription.png[link=self, window=blank]
