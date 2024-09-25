@@ -14,3 +14,5 @@ Next guides will cover:
 * How to protect the fraud detection demo with Confidential Containers on ARO
 
 **Thank you for taking the time to explore OSC!**
+
+For any feedback on this workshop, please write an email to eesposit@redhat.com or submit a Issue/Pull request to https://github.com/esposem/osc-demo-showroom[this lab github repository, window=blank]
