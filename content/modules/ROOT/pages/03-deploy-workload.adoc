@@ -171,14 +171,9 @@ bastion-q5hqf                                 Standard_DS1_v2
 ----
 
 . By SSH'ing into the VM.
-  * Recall `id_rsa` created when xref:02-configure-osc.adoc#pp-key[setting up the operator]. We will use that to log into the pod VM.
-+
-[source,sh,role=execute]
-----
-oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
-----
+  * Recall `id_rsa` created when xref:02-configure-osc.adoc#pp-key[setting up the operator]. We will use that to log into the pod VM. If you followed all the commands so far, your key should be in the folder where you currently are.
   * Get the pod VM private ip address:
-    ** List all VMs
+    ** List all VMs to find your pod VM name. For our hello world example, it should be something like `podvm-hello-openshift-<random chars>`:
 +
 [source,sh,role=execute]
 ----
@@ -215,7 +210,7 @@ az vm list-ip-addresses --name $VM_NAME \
   --output table
 ----
 +
-Example output:
+Example output, the ip will probably be different for you:
 +
 [source,texinfo,subs="attributes"]
 ----
@@ -223,19 +218,42 @@ VirtualMachine                  PrivateIPAddresses
 ------------------------------  --------------------
 podvm-hello-openshift-c0311387  10.0.2.10
 ----
-  * Log into the CAA pod (one of the three running in the worker nodes):
+  * Log into one of the CAA pods running in the worker nodes:
 +
 [source,sh,role=execute]
 ----
 oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
 ----
-  * Once in the CAA pod, the `id_rsa` key is already embedded inside in `/root/.ssh/`. Simply log into the pod VM:
++
+Example output:
++
+[source,texinfo,subs="attributes"]
+----
+[azure@bastion-m4vv4 ~]$ # <--- Notice how we are now in the bastion node
+[azure@bastion-m4vv4 ~]$ oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in worker node!
+----
+  * Once inside the CAA pod, the `id_rsa` key to access the pod is already embedded inside in `/root/.ssh/`. Therefore from the CAA pod, simply ssh into the pod VM using the IP that you just found. In our case, it's `10.0.2.10`. By default, a peer pod VM has always an user called `peerpod`. Let's log in with that:
 +
 [source,sh,role=execute]
 ----
-ssh peerpod@10.0.2.10
+PEER_POD_VM_IP=10.0.2.10
+ssh peerpod@$PEER_POD_VM_IP
 ----
-  * Inspect the VM. For example, check the ip address with `ip addr` and see how it differs from the original vm (type `exit` to log out), check the kernel version with `uname -r`, processes running with `ps -aux`, os-release with `cat /etc/os-release` and so on.
++
+Example output:
++
+[source,texinfo,subs="attributes"]
+----
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in worker node!
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# PEER_POD_VM_IP=10.0.2.10
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@$PEER_POD_VM_IP
+[...]
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+[...]
+[peerpod@podvm-hello-openshift-c0311387 ~]$ # <--- Notice how we are now in the pod VM!
+----
+  * Inspect the VM. For example, check the ip address with `ip addr` and see how it differs from the original VM ( to go back to the original VM, type `exit` to log out from ssh), check the kernel version with `uname -r`, processes running with `ps -aux`, os-release with `cat /etc/os-release` and so on.
 +
 Example: check the kernel version (assumes you are in the CAA pod).
 +
@@ -252,11 +270,9 @@ Expected output:
 # uname -r
 4.18.0-372.64.1.el8_6.x86_64 # <----------------
 # ssh peerpod@10.0.2.10 uname -r
-The authenticity of host '10.0.2.10 (10.0.2.10)' can't be established.
-ED25519 key fingerprint is SHA256:nsvcoaTXbJQ+z8QqZE6QHmmiD33s+e5/GPZ4UxXSmvo.
-This key is not known by any other names
+[...]
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Failed to add the host to the list of known hosts (/root/.ssh/known_hosts).
+[...]
 5.14.0-362.8.1.el9_3.x86_64 # <----------------
 ----
 
