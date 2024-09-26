@@ -202,7 +202,7 @@ podvm-hello-openshift-c0311387                aro-gqvj3nvq     eastus
 +
 [source,sh,role=execute]
 ----
-VM_NAME=podvm-hello-openshift-c0311387
+VM_NAME=podvm-hello-openshift-c0311387 # replace it with your pod vm name!
 ARO_RESOURCE_GROUP=$(oc get infrastructure/cluster -o jsonpath='{.status.platformStatus.azure.resourceGroupName}')
 
 az vm list-ip-addresses --name $VM_NAME \
@@ -218,7 +218,7 @@ VirtualMachine                  PrivateIPAddresses
 ------------------------------  --------------------
 podvm-hello-openshift-c0311387  10.0.2.10
 ----
-  * Log into one of the CAA pods running in the worker nodes:
+  * Log into one of the CAA pods running in the worker nodes. These pods are part the OSC operator and take care of creating, handling and destroying all the peer pods containers and VMs:
 +
 [source,sh,role=execute]
 ----
@@ -231,13 +231,13 @@ Example output:
 ----
 [azure@bastion-m4vv4 ~]$ # <--- Notice how we are now in the bastion node
 [azure@bastion-m4vv4 ~]$ oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in worker node!
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in a pod running in a worker node!
 ----
   * Once inside the CAA pod, the `id_rsa` key to access the pod is already embedded inside in `/root/.ssh/`. Therefore from the CAA pod, simply ssh into the pod VM using the IP that you just found. In our case, it's `10.0.2.10`. By default, a peer pod VM has always an user called `peerpod`. Let's log in with that:
 +
 [source,sh,role=execute]
 ----
-PEER_POD_VM_IP=10.0.2.10
+PEER_POD_VM_IP=10.0.2.10 # replace it with your pod vm ip!
 ssh peerpod@$PEER_POD_VM_IP
 ----
 +
@@ -245,9 +245,8 @@ Example output:
 +
 [source,texinfo,subs="attributes"]
 ----
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in worker node!
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# PEER_POD_VM_IP=10.0.2.10
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@$PEER_POD_VM_IP
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in a pod running in a worker node!
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@10.0.2.10
 [...]
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 [...]
@@ -259,8 +258,9 @@ Example: check the kernel version (assumes you are in the CAA pod).
 +
 [source,sh,role=execute]
 ----
-uname -r # get current worker kernel
-ssh peerpod@10.0.2.10 uname -r
+PEER_POD_VM_IP=10.0.2.10 # replace it with your pod vm ip!
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# uname -r # get current worker node kernel
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@$PEER_POD_VM_IP uname -r
 ----
 +
 Expected output:
@@ -269,7 +269,7 @@ Expected output:
 ----
 # uname -r
 4.18.0-372.64.1.el8_6.x86_64 # <----------------
-# ssh peerpod@10.0.2.10 uname -r
+# ssh peerpod@PEER_POD_VM_IP uname -r
 [...]
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 [...]
