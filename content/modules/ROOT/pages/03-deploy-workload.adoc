@@ -222,6 +222,7 @@ podvm-hello-openshift-c0311387  10.0.2.10
 +
 [source,sh,role=execute]
 ----
+# in the bastion node:
 oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
 ----
 +
@@ -237,6 +238,7 @@ Example output:
 +
 [source,sh,role=execute]
 ----
+# in the CAA pod:
 PEER_POD_VM_IP=10.0.2.10 # replace it with your pod vm ip!
 ssh peerpod@$PEER_POD_VM_IP
 ----
@@ -245,8 +247,7 @@ Example output:
 +
 [source,texinfo,subs="attributes"]
 ----
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in a pod running in a worker node!
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@10.0.2.10
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@10.0.2.10 # <--- Notice how we are now in a pod running in a worker node!
 [...]
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 [...]
@@ -254,13 +255,13 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 ----
   * Inspect the VM. For example, check the ip address with `ip addr` and see how it differs from the original VM ( to go back to the original VM, type `exit` to log out from ssh), check the kernel version with `uname -r`, processes running with `ps -aux`, os-release with `cat /etc/os-release` and so on.
 +
-Example: check the kernel version (assumes you are in the CAA pod).
+Example: check the kernel version (assumes you still are in the CAA pod).
 +
 [source,sh,role=execute]
 ----
-PEER_POD_VM_IP=10.0.2.10 # replace it with your pod vm ip!
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# uname -r # get current worker node kernel
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# ssh peerpod@$PEER_POD_VM_IP uname -r
+# in the CAA pod:
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] uname -r # get current worker node kernel
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] ssh peerpod@$PEER_POD_VM_IP uname -r
 ----
 +
 Expected output:
