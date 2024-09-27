@@ -154,7 +154,7 @@ image::07-hello.png[link=self, window=blank]
 az vm list --query "[].{Name:name, VMSize:hardwareProfile.vmSize}" --output table
 ----
 +
-Expected output:
+Example output:
 +
 [source,texinfo,subs="attributes"]
 ----
@@ -230,8 +230,8 @@ Example output:
 +
 [source,texinfo,subs="attributes"]
 ----
-[azure@bastion-m4vv4 ~]$ # <--- Notice how we are now in the bastion node
-[azure@bastion-m4vv4 ~]$ oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
+[azure@bastion-q5hqf ~]$ # <--- Notice how we are now in the bastion node
+[azure@bastion-q5hqf ~]$ oc exec -it -n openshift-sandboxed-containers-operator ds/peerpodconfig-ctrl-caa-daemon -- bash
 [root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in a pod running in a worker node!
 ----
   * Once inside the CAA pod, the `id_rsa` key to access the pod is already embedded inside in `/root/.ssh/`. Therefore from the CAA pod, simply ssh into the pod VM using the IP that you just found. In our case, it's `10.0.2.10`. By default, a peer pod VM has always an user called `peerpod`. Let's log in with that:
@@ -253,28 +253,100 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 [...]
 [peerpod@podvm-hello-openshift-c0311387 ~]$ # <--- Notice how we are now in the pod VM!
 ----
-  * Inspect the VM. For example, check the ip address with `ip addr` and see how it differs from the original VM ( to go back to the original VM, type `exit` to log out from ssh), check the kernel version with `uname -r`, processes running with `ps -aux`, os-release with `cat /etc/os-release` and so on.
+  * Inspect the VM. For example, check the ip address with `ip addr` and see how it differs from the original VM, check the kernel version with `uname -r`, processes running with `ps -aux`, os-release with `cat /etc/os-release` and so on.
 +
-Example: check the kernel version (assumes you still are in the CAA pod).
+Example: check the kernel version in both a normal pod running in the worker node, and the pod VM.
+  ** If you still are ssh'ed in the pod VM, exit from it using `exit` or pressing the key combination Ctrl+d:
++
+[source,texinfo,subs="attributes"]
+----
+[peerpod@podvm-hello-openshift-c0311387 ~]$ exit # <--- Notice how we are now in the pod VM!
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# # <--- Notice how we are now in a pod running in a worker node!
+----
+  ** Run `uname -r` in the CAA pod running in the worker node. Notice which kernel it prints.
 +
 [source,sh,role=execute]
 ----
 # in the CAA pod:
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] uname -r # get current worker node kernel
-[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] ssh peerpod@$PEER_POD_VM_IP uname -r
+uname -r # get current worker node kernel
 ----
 +
-Expected output:
+Example output:
 +
 [source,texinfo,subs="attributes"]
 ----
-# uname -r
+# in the CAA pod:
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] uname -r # get current worker node kernel
 4.18.0-372.64.1.el8_6.x86_64 # <----------------
-# ssh peerpod@PEER_POD_VM_IP uname -r
+----
+  ** Run `uname -r` in the pod VM. Notice which kernel it prints, and how it differs from the worker node.
++
+[source,sh,role=execute]
+----
+# in the CAA pod:
+ssh peerpod@$PEER_POD_VM_IP uname -r # get pod VM kernel
+----
++
+Example output. The worker node kernel above is `4.18.0-372.64.1.el8_6.x86_64` while the pod VM is `5.14.0-362.8.1.el9_3.x86_64`:
++
+[source,texinfo,subs="attributes"]
+----
+# in the CAA pod:
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /] ssh peerpod@$PEER_POD_VM_IP uname -r
 [...]
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 [...]
 5.14.0-362.8.1.el9_3.x86_64 # <----------------
+----
+** Now, exit from the CAA pod by typing either `exit` or pressing the key combination Ctrl+d.
++
+[source,texinfo,subs="attributes"]
+----
+[root@aro-cluster-q5hqf-xs7zb-worker-eastus1-6rlsl /]# exit # <--- Notice how we are now in a pod running in a worker node!
+[azure@bastion-q5hqf ~]$ # <--- back to the bastion node!
+----
+** To confirm the kernel difference, run another test pod without using the `kata-remote` runtimeclass. This pod, just like all the traditional ones, is also expected to run in the worker node.
++
+[source,sh,role=execute]
+----
+oc apply -f-<<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+  labels:
+    app: test
+spec:
+  containers:
+    - name: test
+      image: quay.io/openshift/origin-hello-openshift
+      ports:
+        - containerPort: 8888
+      securityContext:
+        privileged: false
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+EOF
+** Enter inside the newly created `test` pod and confirm that it is running on the same worker node kernel, `4.18.0-372.64.1.el8_6.x86_64`, and therefore it differs from the pod VM kernel:
++
+[source,sh,role=execute]
+----
+# in the bastion node:
+oc exec pods/test -- uname -r
+----
++
+Example output:
++
+[source,texinfo,subs="attributes"]
+----
+[azure@bastion-q5hqf ~]$ oc exec pods/test -- uname -r
+4.18.0-372.64.1.el8_6.x86_64
 ----
 
 [#destroy]
