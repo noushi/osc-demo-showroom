@@ -333,6 +333,8 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 EOF
+----
+
 ** Enter inside the newly created `test` pod and confirm that it is running on the same worker node kernel, `4.18.0-372.64.1.el8_6.x86_64`, and therefore it differs from the pod VM kernel:
 +
 [source,sh,role=execute]
