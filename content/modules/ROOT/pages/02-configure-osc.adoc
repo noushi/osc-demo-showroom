@@ -60,6 +60,7 @@ oc apply -f pp-secret.yaml
 == Enable Confidential Containers feature gate
 
 . Create and apply `cc-fg.yaml` ConfigMap
++
 [source,sh,role=execute]
 ----
 cat > cc-fg.yaml <<EOF
