@@ -7,7 +7,7 @@ Now that the Trustee operator is installed, we need to set it up.
 
 Create a secure route with edge TLS termination for Trustee. External ingress traffic reaches the router pods as HTTPS and passes on to the Trustee pods as HTTP.
 
-. Create a route
+. Create a route.
 +
 [source,sh,role=execute]
 ----
@@ -32,4 +32,122 @@ Example output:
 [source,texinfo,subs="attributes"]
 ----
 kbs-service-trustee-operator-system.apps.rs01nyk5.eastus.aroapp.io
+----
+
+[#trustee-secret]
+== Create a Trustee authentication secret
+
+. Create private and public keys.
++
+[source,sh,role=execute]
+----
+openssl genpkey -algorithm ed25519 > trustee_privateKey
+openssl pkey -in trustee_privateKey -pubout -out trustee_publicKey
+----
+
+. Create a secret with the public key.
++
+[source,sh,role=execute]
+----
+oc create secret generic kbs-auth-public-key --from-file=trustee_publicKey -n trustee-operator-system
+----
+
+. Inspect the newly created secret.
++
+[source,sh,role=execute]
+----
+oc get secret -n trustee-operator-system
+----
+
+[#trustee-cm]
+== Create Trustee ConfigMap
+
+Create the and apply the Trustee `kbs-configmap.yaml` ConfigMap.
+
+[source,sh,role=execute]
+----
+cat > kbs-configmap.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kbs-config-cm
+  namespace: trustee-operator-system
+data:
+  kbs-config.json: |
+    {
+      "insecure_http" : true,
+      "sockets": ["0.0.0.0:8080"],
+      "auth_public_key": "/etc/auth-secret/publicKey",
+      "attestation_token_config": {
+        "attestation_token_type": "CoCo"
+      },
+      "repository_config": {
+        "type": "LocalFs",
+        "dir_path": "/opt/confidential-containers/kbs/repository"
+      },
+      "as_config": {
+        "work_dir": "/opt/confidential-containers/attestation-service",
+        "policy_engine": "opa",
+        "attestation_token_broker": "Simple",
+          "attestation_token_config": {
+          "duration_min": 5
+          },
+        "rvps_config": {
+          "store_type": "LocalJson",
+          "store_config": {
+            "file_path": "/opt/confidential-containers/rvps/reference-values/reference-values.json"
+          }
+         }
+      },
+      "policy_engine_config": {
+        "policy_path": "/opt/confidential-containers/opa/policy.rego"
+      }
+    }
+EOF
+
+cat kbs-configmap.yaml
+----
+
+[#trustee-conf]
+== Configure Trustee
+
+You can configure the following values, policies, and secrets for Trustee:
+
+* Optional: Reference values for the Reference Value Provider Service.
+* Optional: Attestation policy.
+* Provisioning Certificate Caching Service for Intel Trust Domain Extensions (TDX).
+* Optional: Secret for custom keys for Trustee clients.
+* Optional: Secret for container image signature verification.
+* Container image signature verification policy. This policy is mandatory. If you do not use container image signature verification, you must create a policy that does not verify signatures.
+* Resource access policy.
+
+. Reference values (optional)
++
+You can configure reference values for the Reference Value Provider Service (RVPS) by specifying the trusted digests of your hardware platform.
++
+The client collects measurements from the running software, the Trusted Execution Environment (TEE) hardware and firmware and it submits a quote with the claims to the Attestation Server. These measurements must match the trusted digests registered to the Trustee. This process ensures that the confidential VM (CVM) is running the expected software stack and has not been tampered with.
++
+[source,sh,role=execute]
+----
+cat > rvps-configmap.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rvps-reference-values
+  namespace: trustee-operator-system
+data:
+  reference-values.json: |
+    [ (1)
+    ]
+EOF
+
+cat rvps-configmap.yaml
+----
+(1) = Specify the trusted digests for your hardware platform if required. Otherwise, leave it empty.
++
+Once the reference values have been added, apply the ConfigMap.
++
+[source,sh,role=execute]
+----
+oc apply -f rvps-configmap.yaml
 ----
