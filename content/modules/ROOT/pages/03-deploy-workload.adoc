@@ -37,7 +37,7 @@ metadata:
 # ...
 ----
 +
-Note that the `machine_type` must be one of the one specified in `AZURE_INSTANCE_SIZES` or `AZURE_INSTANCE_SIZE` in the OSC xref:02-configure-osc.adoc#pp-cm[ConfigMap]. By default, all instance types will be `AZURE_INSTANCE_SIZE`. 
+Note that the `machine_type` must be one of the one specified in `AZURE_INSTANCE_SIZES` or `AZURE_INSTANCE_SIZE` in the OSC xref:02-configure-osc.adoc#pp-cm[ConfigMap]. By default, all instance types will be `AZURE_INSTANCE_SIZE`.
 
 * Define the amount of memory available for the workload to use. The workload will run on an automatic instance size based on the amount of memory available.
 +
