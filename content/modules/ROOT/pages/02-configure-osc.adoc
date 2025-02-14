@@ -27,6 +27,7 @@ echo "AZURE_CLIENT_ID: \"$AZURE_CLIENT_ID\""
 echo "AZURE_CLIENT_SECRET: \"$AZURE_CLIENT_SECRET\""
 echo "AZURE_TENANT_ID: \"$AZURE_TENANT_ID\""
 echo "AZURE_SUBSCRIPTION_ID: \"$AZURE_SUBSCRIPTION_ID\""
+echo ""
 ----
 
 . Create and apply the `peer-pods-secret.yaml` Secret
@@ -57,9 +58,11 @@ oc apply -f pp-secret.yaml
 
 [#feature-gate]
 == Enable Confidential Containers feature gate
-+
+
+. Create and apply `cc-fg.yaml` ConfigMap
 [source,sh,role=execute]
 ----
+cat > cc-fg.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -67,6 +70,14 @@ metadata:
   namespace: openshift-sandboxed-containers-operator
 data:
   confidential: "true"
+EOF
+
+cat cc-fg.yaml
+----
++
+[source,sh,role=execute]
+----
+oc apply -f cc-fg.yaml
 ----
 
 [#pp-cm]
@@ -97,6 +108,7 @@ echo "ARO_REGION: \"$ARO_REGION\""
 echo "ARO_RESOURCE_GROUP: \"$ARO_RESOURCE_GROUP\""
 echo "ARO_SUBNET_ID: \"$ARO_WORKER_SUBNET_ID\""
 echo "ARO_NSG_ID: \"$ARO_NSG_ID\""
+echo ""
 ----
 
 . Create and apply the `peer-pods-configmap.yaml` ConfigMap. Note that at this point you must have already xref:01-install-trustee.adoc#webui[installed Trustee] and got `${TRUSTEE_HOST}`.
@@ -161,6 +173,11 @@ ssh-keygen -f ./id_rsa -N ""
 
 . Upload `id_rsa` and `id_rsa.pub` as `Secret` into Openshift.
 +
+[source,sh,role=execute]
+----
+oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operator --from-file=id_rsa.pub=./id_rsa.pub --from-file=id_rsa=./id_rsa
+----
++
 [IMPORTANT]
 ====
 For the purpose of this workshop, and since we are later going to ssh into the pod VM, we need to also upload `id_rsa`. This is not intended for production purposes, since whoever has the key can ssh into the pod VM. The intended and officially documented command is:
@@ -168,12 +185,12 @@ For the purpose of this workshop, and since we are later going to ssh into the p
 ----
 oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operator --from-file=id_rsa.pub=./id_rsa.pub
 ----
-====
-+
+In addition, the ssh keys should be also deleted after the above command, as per documentation:
 [source,sh,role=execute]
 ----
-oc create secret generic ssh-key-secret -n openshift-sandboxed-containers-operator --from-file=id_rsa.pub=./id_rsa.pub --from-file=id_rsa=./id_rsa
+shred --remove id_rsa.pub id_rsa
 ----
+====
 
 [#pp-kc]
 == Create the peer-pods KataConfig
