@@ -6,7 +6,7 @@ Now that the OSC operator is installed, we need to set it up.
 
 To complete this section, it is mandatory to have all ARO credentials at hand defined in the xref:index.adoc#credentials[introduction], because they will have to be inserted in the various resources that we are going to create.
 
-In order to create the xref:02-configure-osc.adoc#pp-cm[peer-pods configmap], it is necessary to have Trustee xref:01-install-trustee.adoc#webui[installed] and xref:02-configure-Trustee.adoc#trustee-route[configured].
+In order to create the xref:02-configure-osc.adoc#pp-cm[peer-pods configmap], it is necessary to have Trustee xref:01-install-trustee.adoc#webui[installed] and xref:02-configure-trustee.adoc#trustee-route[configured].
 
 [#pp-secret]
 == Create the peer-pods secret

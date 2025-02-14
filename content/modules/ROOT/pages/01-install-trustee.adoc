@@ -26,7 +26,7 @@ image::01-trustee-operatorhub-ui.png[link=self, window=blank]
 
 . On the **Install Operator** page, select **stable** from the list of available **Update Channel** options.
 +
-image::02-install-ui.png[link=self, window=blank]
+image::02-trustee-install-ui.png[link=self, window=blank]
 
 . Verify that **Operator recommended Namespace** is selected for **Installed Namespace**. This installs the Operator in the mandatory trustee-operator-system namespace. If this namespace does not yet exist, it is automatically created.
 

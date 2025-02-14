@@ -1,8 +1,8 @@
 * xref:index.adoc[Introduction]
 
 * xref:01-install-trustee.adoc[1. Install the Trustee operator]
-** xref:01-install-osc.adoc#webui[Web UI]
-** xref:01-install-osc.adoc#cmdline[Command line]
+** xref:01-install-trustee.adoc#webui[Web UI]
+** xref:01-install-trustee.adoc#cmdline[Command line]
 
 * xref:02-configure-trustee.adoc[2. Configure the Trustee operator]
 ** xref:02-configure-trustee.adoc#trustee-route[Create the route]
