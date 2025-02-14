@@ -10,10 +10,10 @@ For details on **attestation flow in confidential containers**, read our https:/
 
 There are two ways to install the Trustee operator:
 
-* xref:01-install-trustee.adoc#webui[Install the operator using the web interface]
-* xref:01-install-trustee.adoc#cmdline[Install the operator using the command line]
+* xref:01-install-trustee.adoc#twebui[Install the operator using the web interface]
+* xref:01-install-trustee.adoc#tcmdline[Install the operator using the command line]
 
-[#webui]
+[#twebui]
 == Using the web interface
 
 . In the Openshift Container Platform web console, navigate to **Operators > OperatorHub**.
@@ -46,7 +46,7 @@ The Trustee Operator is now installed on your cluster.
 +
 image::03-trustee-install-ui.png[link=self, window=blank]
 
-[#cmdline]
+[#tcmdline]
 == Using the command line
 
 TIP: If you don't want to copy-paste, there is a xref:01-install-osc.adoc#scripts[script] that performs all the steps above automatically.
