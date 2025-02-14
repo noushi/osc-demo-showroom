@@ -1,6 +1,6 @@
-= Install the operator
+= Install the OSC operator
 
-There are two ways to install the operator:
+There are two ways to install the OSC operator:
 
 * xref:01-install-osc.adoc#webui[Install the operator using the web interface]
 * xref:01-install-osc.adoc#cmdline[Install the operator using the command line]
@@ -24,7 +24,7 @@ image::02-install-ui.png[link=self, window=blank]
 
 NOTE: Attempting to install the Openshift sandboxed containers Operator in a namespace other than `openshift-sandboxed-containers-operator` causes the installation to fail.
 
-. Verify that **Automatic** is selected for **Approval Strategy**. **Automatic** is the default value, and enables automatic updates to Openshift sandboxed containers when a new z-stream release is available.
+. Verify that **Automatic** is selected for **Update approval**. **Automatic** is the default value, and enables automatic updates to Openshift sandboxed containers when a new z-stream release is available.
 
 . Click **Install**.
 +
@@ -99,7 +99,7 @@ spec:
   name: sandboxed-containers-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: sandboxed-containers-operator.v1.6.0
+  startingCSV: sandboxed-containers-operator.v1.8.1
 EOF
 ----
 +
@@ -121,7 +121,7 @@ oc get csv -n openshift-sandboxed-containers-operator
 [source,texinfo,subs="attributes"]
 ----
 NAME                             DISPLAY                                  VERSION             REPLACES                   PHASE
-openshift-sandboxed-containers   openshift-sandboxed-containers-operator  1.6.0                                          Succeeded
+openshift-sandboxed-containers   openshift-sandboxed-containers-operator  1.8.1                                          Succeeded
 ----
 
 [#scripts]
@@ -157,7 +157,7 @@ spec:
   name: sandboxed-containers-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: sandboxed-containers-operator.v1.6.0
+  startingCSV: sandboxed-containers-operator.v1.8.1
 EOF
 ----
 

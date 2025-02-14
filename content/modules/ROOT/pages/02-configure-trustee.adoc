@@ -1,0 +1,35 @@
+= Configure the Trustee operator
+
+Now that the Trustee operator is installed, we need to set it up.
+
+[#trustee-route]
+== Create a route for Trustee
+
+Create a secure route with edge TLS termination for Trustee. External ingress traffic reaches the router pods as HTTPS and passes on to the Trustee pods as HTTP.
+
+. Create a route
++
+[source,sh,role=execute]
+----
+oc create route edge --service=kbs-service --port kbs-port \
+  -n trustee-operator-system
+----
++
+NOTE: Currently, only a route with a valid CA-signed certificate is supported. You cannot use a route with self-signed certificate.
+
+. Set the TRUSTEE_HOST variable. This variable will be useful later when we set the xref:02-configure-osc.adoc#pp-cm[peer-pods ConfigMap]
++
+[source,sh,role=execute]
+----
+TRUSTEE_HOST=$(oc get route -n trustee-operator-system kbs-service \
+  -o jsonpath={.spec.host})
+
+echo $TRUSTEE_HOST
+----
++
+Example output:
++
+[source,texinfo,subs="attributes"]
+----
+kbs-service-trustee-operator-system.apps.rs01nyk5.eastus.aroapp.io
+----

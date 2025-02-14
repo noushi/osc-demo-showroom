@@ -1,10 +1,12 @@
-= Configure the operator
+= Configure the OSC operator
 
-Now that the operator is installed, we need to set it up.
+Now that the OSC operator is installed, we need to set it up.
 
 **Prerequisites**
 
 To complete this section, it is mandatory to have all ARO credentials at hand defined in the xref:index.adoc#credentials[introduction], because they will have to be inserted in the various resources that we are going to create.
+
+In order to create the xref:02-configure-osc.adoc#pp-cm[peer-pods configmap], it is necessary to have Trustee xref:01-install-trustee.adoc#webui[installed] and xref:02-configure-Trustee.adoc#trustee-route[configured].
 
 [#pp-secret]
 == Create the peer-pods secret
@@ -53,6 +55,20 @@ cat pp-secret.yaml
 oc apply -f pp-secret.yaml
 ----
 
+[#feature-gate]
+== Enable Confidential Containers feature gate
++
+[source,sh,role=execute]
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: osc-feature-gates
+  namespace: openshift-sandboxed-containers-operator
+data:
+  confidential: "true"
+----
+
 [#pp-cm]
 == Create the peer-pods configmap
 
@@ -68,15 +84,14 @@ ARO_RESOURCE_GROUP=$(oc get infrastructure/cluster -o jsonpath='{.status.platfor
 ARO_REGION=$(oc get secret -n kube-system azure-credentials -o jsonpath="{.data.azure_region}" | base64 -d)
 
 # Get VNET name used by ARO. This exists in the admin created RG.
-# In this ARO infrastructure, there are 2 VNETs: pick the first one,
-# ie the one starting with "aro-".
-ARO_VNET_NAME=$(az network vnet list --resource-group $AZURE_RESOURCE_GROUP --query "[0].{Name:name}" --output tsv)
+# In this ARO infrastructure, there are 2 VNETs: pick the one starting with "aro-".
+# The other is used internally by this workshop
+ARO_VNET_NAME=$(az network vnet list --resource-group $AZURE_RESOURCE_GROUP --query "[].{Name:name} | [? contains(Name, 'aro')]" --output tsv)
 
 # Get the Openshift worker subnet ip address cidr. This exists in the admin created RG
 ARO_WORKER_SUBNET_ID=$(az network vnet subnet list --resource-group $AZURE_RESOURCE_GROUP --vnet-name $ARO_VNET_NAME --query "[].{Id:id} | [? contains(Id, 'worker')]" --output tsv)
 
 ARO_NSG_ID=$(az network nsg list --resource-group $ARO_RESOURCE_GROUP --query "[].{Id:id}" --output tsv)
-
 
 echo "ARO_REGION: \"$ARO_REGION\""
 echo "ARO_RESOURCE_GROUP: \"$ARO_RESOURCE_GROUP\""
@@ -84,7 +99,7 @@ echo "ARO_SUBNET_ID: \"$ARO_WORKER_SUBNET_ID\""
 echo "ARO_NSG_ID: \"$ARO_NSG_ID\""
 ----
 
-. Create and apply the `peer-pods-configmap.yaml` ConfigMap.
+. Create and apply the `peer-pods-configmap.yaml` ConfigMap. Note that at this point you must have already xref:01-install-trustee.adoc#webui[installed Trustee] and got `${TRUSTEE_HOST}`.
 +
 [source,sh,role=execute]
 ----
@@ -97,15 +112,16 @@ metadata:
 data:
   CLOUD_PROVIDER: "azure"
   VXLAN_PORT: "9000"
-  AZURE_INSTANCE_SIZE: "Standard_D8as_v5"
-  AZURE_INSTANCE_SIZES: "Standard_D16as_v5,Standard_D32as_v5"
+  AZURE_INSTANCE_SIZE: "Standard_DC8as_v5"
+  AZURE_INSTANCE_SIZES: "Standard_DC16as_v5,Standard_DC32as_v5"
   AZURE_RESOURCE_GROUP: "${ARO_RESOURCE_GROUP}"
   AZURE_REGION: "${ARO_REGION}"
   AZURE_SUBNET_ID: "${ARO_WORKER_SUBNET_ID}"
   AZURE_NSG_ID: "${ARO_NSG_ID}"
   AZURE_IMAGE_ID: ""
   PROXY_TIMEOUT: "5m"
-  DISABLECVM: "true"
+  DISABLECVM: "false"
+  AA_KBC_PARAMS: "cc_kbc::https://${TRUSTEE_HOST}"
 EOF
 
 cat pp-cm.yaml
