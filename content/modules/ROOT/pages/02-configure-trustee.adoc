@@ -155,7 +155,7 @@ EOF
 cat security-policy-config.json
 ----
 
-* *Alternatively, with signature verification (requires  a xref:02-configure-trustee.adoc:#trustee-signed-policy[container image verification secret]):*
+* *Alternatively, with signature verification (requires  a xref:02-configure-trustee.adoc#trustee-signed-policy[container image verification secret]):*
 +
 Define some variables first:
 +
@@ -211,7 +211,7 @@ oc apply secret generic security-policy \
 +
 IMPORTANT: Do not alter the secret type, `security-policy`, or the key, `osc`.
 +
-Note that `security-policy` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
+Note that `security-policy` will be later used in the xref:02-configure-trustee.adoc#trustee-kbsconfig[KbsConfig]
 
 [#trustee-optional-config]
 === Optional configurations
@@ -241,7 +241,7 @@ oc apply secret generic $CONTAINER_IMAGE_SIGNATURE_TYPE \
     -n trustee-operator-system
 ----
 
-Note that `$CONTAINER_IMAGE_SIGNATURE_TYPE` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
+Note that `$CONTAINER_IMAGE_SIGNATURE_TYPE` will be later used in the xref:02-configure-trustee.adoc#trustee-kbsconfig[KbsConfig]
 
 ==== **Provisioning Certificate Caching Service for TDX**
 
@@ -434,7 +434,7 @@ oc apply secret generic kbsres1 \
   -n trustee-operator-system
 ----
 
-Note that `kbsres1` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
+Note that `kbsres1` will be later used in the xref:02-configure-trustee.adoc#trustee-kbsconfig[KbsConfig]
 
 [#trustee-kbsconfig]
 == Create the KbsConfig custom resource
@@ -473,7 +473,8 @@ cat kbsconfig-cr.yaml
 
 Note that if you defined `$CONTAINER_IMAGE_SIGNATURE_TYPE` to enforce container image signature verification, then the `kbsSecretResources` field should also contain `$CONTAINER_IMAGE_SIGNATURE_TYPE`. In this workshop we assume it is not needed so it is not added.
 
-Optionally only if you did the optional steps:
+If you did the optional steps:
+
 * For TDX PCCS you can add the `tdxConfigSpec` section
 * For custom attestation policy define `kbsAttestationPolicyConfigMapName`
 * Define `kbsServiceType` if you created a service type other than the default `ClusterIP` service to expose applications within the cluster external traffic. You can specify `NodePort`, `LoadBalancer`, or `ExternalName`.
