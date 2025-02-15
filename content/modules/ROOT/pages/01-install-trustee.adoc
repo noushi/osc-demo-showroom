@@ -2,11 +2,11 @@
 
 In confidential computing environments, *attestation* is crucial in verifying the trustworthiness of the location where you plan to run your workload or where you plan to send confidential information. Before actually running the workload or transmitting the confidential information, you need to perform **attestation**.
 
-The https://github.com/confidential-containers/trustee[Trustee project] (previously known as https://github.com/confidential-containers/kbs[CoCo KBS]) includes components deployed on a trusted side and used to verify whether the remote workload is running in a trusted execution environment (TEE). It also verifies that the remote environment uses the expected software and hardware versions.
+The https://github.com/confidential-containers/trustee[Trustee project, window=blank] (previously known as https://github.com/confidential-containers/kbs[CoCo KBS, window=blank]) includes components deployed on a trusted side and used to verify whether the remote workload is running in a trusted execution environment (TEE). It also verifies that the remote environment uses the expected software and hardware versions.
 
-For an **overview of attestation**, read our https://www.redhat.com/en/blog/learn-about-confidential-containers[Learn about Confidential Computing Attestation] blog series.
+For an **overview of attestation**, read our https://www.redhat.com/en/blog/learn-about-confidential-containers[Learn about Confidential Computing Attestation, window=blank] blog series.
 
-For details on **attestation flow in confidential containers**, read our https://www.redhat.com/en/blog/understanding-confidential-containers-attestation-flow[Understanding the Confidential Containers Attestation Flow] article.
+For details on **attestation flow in confidential containers**, read our https://www.redhat.com/en/blog/understanding-confidential-containers-attestation-flow[Understanding the Confidential Containers Attestation Flow, window=blank] article.
 
 There are two ways to install the Trustee operator:
 
