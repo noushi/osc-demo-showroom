@@ -121,47 +121,24 @@ You can configure the following values, policies, and secrets for Trustee:
 * Optional: Attestation policy.
 * Optional: Secret for custom keys for Trustee clients.
 
-In the above sections, we will elencate how to set up all these options, but for the purpose of the workshop, setting up the mandatory settings is enough.
+In the sections below, we will elencate how to set up all these options, but for the purpose of the workshop, setting up the mandatory settings is enough.
 
-. **Secret for container image signature verification (optional)**
-+
-**Purpose of this resource**: This secret is only necessary if you are planning to enforce the container image signature policy. It defines which container signature to trust.
-+
-If you use container image signature verification, you must create a secret that contains the public container image signing key. The Trustee Operator uses the secret to verify the signature, ensuring that only trusted and authenticated container images are deployed in your environment.
-+
-Specify the secret `$CONTAINER_IMAGE_SIGNATURE_TYPE` (for example `img-sig`), the secret `$CONTAINER_IMAGE_SIGNATURE_TAG` (for example `pub-key`), and `$CONTAINER_IMAGE_SIGNATURE_PK`, the public container image signing key.
-+
-[source,sh,role=execute]
-----
-CONTAINER_IMAGE_SIGNATURE_TYPE=type
-CONTAINER_IMAGE_SIGNATURE_TAG=tag
-CONTAINER_IMAGE_SIGNATURE_PK=public_key_file
-----
-+
-Create a secret with the following command:
-+
-[source,sh,role=execute]
-----
-oc apply secret generic $CONTAINER_IMAGE_SIGNATURE_TYPE \
-    --from-file=$CONTAINER_IMAGE_SIGNATURE_TAG=./$CONTAINER_IMAGE_SIGNATURE_PK \
-    -n trustee-operator-system
-----
-+
-Note that `$CONTAINER_IMAGE_SIGNATURE_TYPE` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
+[#trustee-mandatory-config]
+=== Minimal settings (workshop)
 
-. **Container image signature verification policy**
-+
+**Container image signature verification policy**
+
 **Purpose of this resource**: Enforces or not container image signature verification. If enabled, all containers images not signed by the trusted certificate provided in the previous step will not be run.
-+
+
 You must create the container image signature verification policy because signature verification is always enabled. If this policy is missing, the pods will not start.
-+
+
 In this workshop, we will use a policy that disables signature verification. In a production environment is of course strongly recommended to enable it.
-+
+
 For more information, see https://github.com/containers/image/blob/main/docs/containers-policy.json.5.md[containers-policy.json 5, window=blank].
-+
+
 Create a `security-policy-config.json` according to the following examples:
-+
-*Without signature verification:*
+
+* *Without signature verification:*
 +
 [source,sh,role=execute]
 ----
@@ -177,8 +154,8 @@ EOF
 
 cat security-policy-config.json
 ----
-+
-*Alternatively, with signature verification:*
+
+* *Alternatively, with signature verification (requires  a xref:02-configure-trustee.adoc:#trustee-signed-policy[container image verification secret]):*
 +
 Define some variables first:
 +
@@ -236,6 +213,35 @@ IMPORTANT: Do not alter the secret type, `security-policy`, or the key, `osc`.
 +
 Note that `security-policy` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
 
+[#trustee-optional-config]
+=== Optional configurations
+
+[#trustee-signed-policy]
+. **Secret for container image signature verification (optional)**
++
+**Purpose of this resource**: This secret is only necessary if you are planning to enforce the container image signature policy. It defines which container signature to trust.
++
+If you use container image signature verification, you must create a secret that contains the public container image signing key. The Trustee Operator uses the secret to verify the signature, ensuring that only trusted and authenticated container images are deployed in your environment.
++
+Specify the secret `$CONTAINER_IMAGE_SIGNATURE_TYPE` (for example `img-sig`), the secret `$CONTAINER_IMAGE_SIGNATURE_TAG` (for example `pub-key`), and `$CONTAINER_IMAGE_SIGNATURE_PK`, the public container image signing key.
++
+[source,sh,role=execute]
+----
+CONTAINER_IMAGE_SIGNATURE_TYPE=type
+CONTAINER_IMAGE_SIGNATURE_TAG=tag
+CONTAINER_IMAGE_SIGNATURE_PK=public_key_file
+----
++
+Create a secret with the following command:
++
+[source,sh,role=execute]
+----
+oc apply secret generic $CONTAINER_IMAGE_SIGNATURE_TYPE \
+    --from-file=$CONTAINER_IMAGE_SIGNATURE_TAG=./$CONTAINER_IMAGE_SIGNATURE_PK \
+    -n trustee-operator-system
+----
++
+Note that `$CONTAINER_IMAGE_SIGNATURE_TYPE` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
 
 . **Provisioning Certificate Caching Service for TDX**
 +
@@ -415,11 +421,20 @@ oc apply -f attestation-policy.yaml
 
 Populate Trustee with secret(s) that are then managed by the above policies and if attestation is successful, are sent to the client(s) (CoCo). For example, a confidential container image/workload could be encrypted, and the key to decrypt it is stored inside the Trustee and provided only if attestation is successful. In this section, we will show how to add the key into Trustee.
 
-In this example, the kbsres1 secret has two entries (key1, key2), which the clients retrieve. You can add additional secrets according to your requirements by using the same format.
 
-**Prerequisites**
+**Prerequisites:** You have created one or more custom keys.
 
-You have created one or more custom keys.
+Define secret name and values. In this example, the `kbsres1` secret has two entries (`key1`, `key2`), which the clients retrieve. You can add additional secrets according to your requirements by using the same format.
+
+[source,sh,role=execute]
+----
+oc apply secret generic kbsres1 \
+  --from-literal key1=<custom_key1> \ 1
+  --from-literal key2=<custom_key2> \
+  -n trustee-operator-system
+----
+
+Note that `kbsres1` will be later used in the xref:02-configure-trustee.adoc:#trustee-kbsconfig[KbsConfig]
 
 [#trustee-kbsconfig]
 == Create the KbsConfig custom resource
@@ -445,7 +460,7 @@ spec:
   kbsAuthSecretName: kbs-auth-public-key
   kbsDeploymentType: AllInOneDeployment
   kbsRvpsRefValuesConfigMapName: rvps-reference-values
-  kbsSecretResources: ["kbsres1", "security-policy", "<type>"]
+  kbsSecretResources: ["kbsres1", "security-policy"]
   kbsResourcePolicyConfigMapName: resource-policy
 # tdxConfigSpec:
 #   kbsTdxConfigMapName: tdx-config
@@ -454,4 +469,57 @@ spec:
 EOF
 
 cat kbsconfig-cr.yaml
+----
+
+Note that if you defined `$CONTAINER_IMAGE_SIGNATURE_TYPE` to enforce container image signature verification, then the `kbsSecretResources` field should also contain `$CONTAINER_IMAGE_SIGNATURE_TYPE`. In this workshop we assume it is not needed so it is not added.
+
+Optionally only if you did the optional steps:
+* For TDX PCCS you can add the `tdxConfigSpec` section
+* For custom attestation policy define `kbsAttestationPolicyConfigMapName`
+* Define `kbsServiceType` if you created a service type other than the default `ClusterIP` service to expose applications within the cluster external traffic. You can specify `NodePort`, `LoadBalancer`, or `ExternalName`.
+
+Once the KbsConfig has been configured, apply it.
+
+[source,sh,role=execute]
+----
+oc apply -f kbsconfig-cr.yaml
+----
+
+=== Verification
+
+Verify the Trustee configuration by checking the Trustee pods and logs.
+
+. Check that both pods are up and running:
++
+[source,sh,role=execute]
+----
+oc get pods -n trustee-operator-system
+----
++
+Expected output:
+[source,texinfo,subs="attributes"]
+----
+NAME                                                   READY   STATUS    RESTARTS   AGE
+trustee-deployment-8585f98449-9bbgl                    1/1     Running   0          22m
+trustee-operator-controller-manager-5fbd44cd97-55dlh   2/2     Running   0          59m
+----
+
+. Check the KBS pod logs
++
+[source,sh,role=execute]
+----
+POD_NAME=$(oc get pods -l app=kbs -o jsonpath='{.items[0].metadata.name}' -n trustee-operator-system)
+
+oc logs -n trustee-operator-system $POD_NAME
+----
++
+Expected output:
+[source,texinfo,subs="attributes"]
+----
+[2024-05-30T13:44:24Z INFO  kbs] Using config file /etc/kbs-config/kbs-config.json
+[2024-05-30T13:44:24Z WARN  attestation_service::rvps] No RVPS address provided and will launch a built-in rvps
+[2024-05-30T13:44:24Z INFO  attestation_service::token::simple] No Token Signer key in config file, create an ephemeral key and without CA pubkey cert
+[2024-05-30T13:44:24Z INFO  api_server] Starting HTTPS server at [0.0.0.0:8080]
+[2024-05-30T13:44:24Z INFO  actix_server::builder] starting 12 workers
+[2024-05-30T13:44:24Z INFO  actix_server::server] Tokio runtime found; starting in existing Tokio runtime
 ----
