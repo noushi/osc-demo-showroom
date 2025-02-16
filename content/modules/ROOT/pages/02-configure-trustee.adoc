@@ -41,18 +41,21 @@ kbs-service-trustee-operator-system.apps.rs01nyk5.eastus.aroapp.io
 +
 [source,sh,role=execute]
 ----
-openssl genpkey -algorithm ed25519 > trustee_privateKey
-openssl pkey -in trustee_privateKey -pubout -out trustee_publicKey
+mkdir trustee
+cd trustee
+openssl genpkey -algorithm ed25519 > privateKey
+openssl pkey -in privateKey -pubout -out publicKey
+cd -
 ----
 
 . Create a secret with the public key.
 +
 [source,sh,role=execute]
 ----
-oc create secret generic kbs-auth-public-key --from-file=trustee_publicKey -n trustee-operator-system
+oc create secret generic kbs-auth-public-key --from-file=./trustee/publicKey -n trustee-operator-system
 ----
 
-. Inspect the newly created secret.
+. Check that the newly created secret exists.
 +
 [source,sh,role=execute]
 ----
@@ -108,16 +111,21 @@ EOF
 cat kbs-configmap.yaml
 ----
 
+[source,sh,role=execute]
+----
+oc apply -f kbs-configmap.yaml
+----
+
 [#trustee-conf]
 == Configure Trustee
 
 You can configure the following values, policies, and secrets for Trustee:
 
+* Reference values for the Reference Value Provider Service(**mandatory**).
 * Optional: Secret for container image signature verification.
 * Container image signature verification policy (**mandatory**).
 * If using TDX: Provisioning Certificate Caching Service for Intel Trust Domain Extensions (TDX).
 * Optional: Resource access policy.
-* Optional: Reference values for the Reference Value Provider Service.
 * Optional: Attestation policy.
 * Optional: Secret for custom keys for Trustee clients.
 
@@ -126,9 +134,41 @@ In the sections below, we will elencate how to set up all these options, but for
 [#trustee-mandatory-config]
 === Minimal settings (workshop)
 
+==== **Reference values for the Reference Value Provider Service**
+
+**Purpose of this resource**: In an attestation scenario, the client (CoCo) collects measurements from the running software, the Trusted Execution Environment (TEE) hardware and firmware and it submits a quote with the claims to the Attestation Server (Trustee, what we are setting right now). These measurements must match the trusted digests registered to the Trustee. This process ensures that the confidential VM (CVM) is running the expected software stack and has not been tampered with. By setting reference values, the user effectively defines the trusted digest (expected values) that Trustee expects from a valid client.
+
+You can configure reference values for the Reference Value Provider Service (RVPS) by specifying the trusted digests of your hardware platform.
+
+[source,sh,role=execute]
+----
+cat > rvps-configmap.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rvps-reference-values
+  namespace: trustee-operator-system
+data:
+  reference-values.json: |
+    [
+    ]
+EOF
+
+cat rvps-configmap.yaml
+----
+
+Inside `reference-values.json` field, specify the trusted digests for your hardware platform if required. Otherwise, leave it empty. For the purpose of this workshop, you can leave it empty.
+
+Once the reference values have been added, apply the ConfigMap.
+
+[source,sh,role=execute]
+----
+oc apply -f rvps-configmap.yaml
+----
+
 ==== **Container image signature verification policy**
 
-**Purpose of this resource**: Enforces or not container image signature verification. If enabled, all containers images not signed by the trusted certificate provided in the previous step will not be run.
+**Purpose of this resource**: Sets wether to enforce or not the container image signature verification feature. If enabled, all containers images not signed by the trusted certificate provided in the previous step will not be run.
 
 You must create the container image signature verification policy because signature verification is always enabled. If this policy is missing, the pods will not start.
 
@@ -199,18 +239,18 @@ EOF
 
 cat security-policy-config.json
 ----
-+
+
 After `security-policy-config.json` is created, create the secret with the following command:
-+
+
 [source,sh,role=execute]
 ----
 oc apply secret generic security-policy \
   --from-file=osc=./security-policy-config.json \
   -n trustee-operator-system
 ----
-+
+
 IMPORTANT: Do not alter the secret type, `security-policy`, or the key, `osc`.
-+
+
 Note that `security-policy` will be later used in the xref:02-configure-trustee.adoc#trustee-kbsconfig[KbsConfig]
 
 [#trustee-optional-config]
@@ -236,7 +276,7 @@ Create a secret with the following command:
 
 [source,sh,role=execute]
 ----
-oc apply secret generic $CONTAINER_IMAGE_SIGNATURE_TYPE \
+oc create secret generic $CONTAINER_IMAGE_SIGNATURE_TYPE \
     --from-file=$CONTAINER_IMAGE_SIGNATURE_TAG=./$CONTAINER_IMAGE_SIGNATURE_PK \
     -n trustee-operator-system
 ----
@@ -308,38 +348,6 @@ Once the policy has been implemented, apply the ConfigMap.
 [source,sh,role=execute]
 ----
 oc apply -f resourcepolicy-configmap.yaml
-----
-
-==== **Reference values**
-
-**Purpose of this resource**: In an attestation scenario, the client (CoCo) collects measurements from the running software, the Trusted Execution Environment (TEE) hardware and firmware and it submits a quote with the claims to the Attestation Server (Trustee, what we are setting right now). These measurements must match the trusted digests registered to the Trustee. This process ensures that the confidential VM (CVM) is running the expected software stack and has not been tampered with. By setting reference values, the user effectively defines the trusted digest (expected values) that Trustee expects from a valid client.
-
-You can configure reference values for the Reference Value Provider Service (RVPS) by specifying the trusted digests of your hardware platform.
-
-[source,sh,role=execute]
-----
-cat > rvps-configmap.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: rvps-reference-values
-  namespace: trustee-operator-system
-data:
-  reference-values.json: |
-    [
-    ]
-EOF
-
-cat rvps-configmap.yaml
-----
-
-Inside `reference-values.json` field, specify the trusted digests for your hardware platform if required. Otherwise, leave it empty. For the purpose of this workshop, you can leave it empty.
-
-Once the reference values have been added, apply the ConfigMap.
-
-[source,sh,role=execute]
-----
-oc apply -f rvps-configmap.yaml
 ----
 
 ==== **Attestation policy**
@@ -426,11 +434,19 @@ Populate Trustee with secret(s) that are then managed by the above policies and 
 
 Define secret name and values. In this example, the `kbsres1` secret has two entries (`key1`, `key2`), which the clients retrieve. You can add additional secrets according to your requirements by using the same format.
 
+Create first the key:
 [source,sh,role=execute]
 ----
-oc apply secret generic kbsres1 \
-  --from-literal key1=<custom_key1> \ 1
-  --from-literal key2=<custom_key2> \
+openssl rand 128 > key.bin
+----
+
+We will add `key1` as a simple string containing the text `Confidential_Secret!`, and `key2` as `key.bin`.
+
+[source,sh,role=execute]
+----
+oc create secret generic kbsres1 \
+  --from-literal key1=Confidential_Secret! \
+  --from-literal key2=key.bin \
   -n trustee-operator-system
 ----
 
@@ -461,7 +477,7 @@ spec:
   kbsDeploymentType: AllInOneDeployment
   kbsRvpsRefValuesConfigMapName: rvps-reference-values
   kbsSecretResources: ["kbsres1", "security-policy"]
-  kbsResourcePolicyConfigMapName: resource-policy
+#  kbsResourcePolicyConfigMapName: resource-policy
 # tdxConfigSpec:
 #   kbsTdxConfigMapName: tdx-config
 # kbsAttestationPolicyConfigMapName: attestation-policy
@@ -471,11 +487,11 @@ EOF
 cat kbsconfig-cr.yaml
 ----
 
-Note that if you defined `$CONTAINER_IMAGE_SIGNATURE_TYPE` to enforce container image signature verification, then the `kbsSecretResources` field should also contain `$CONTAINER_IMAGE_SIGNATURE_TYPE`. In this workshop we assume it is not needed so it is not added.
-
 If you did the optional steps:
 
-* For TDX PCCS you can add the `tdxConfigSpec` section
+* For enforced container image signature verification, extend `kbsSecretResources` list to also have the value of `$CONTAINER_IMAGE_SIGNATURE_TYPE`.
+* For custom resource policy, define `kbsResourcePolicyConfigMapName`.
+* For TDX PCCS define the `tdxConfigSpec` section
 * For custom attestation policy define `kbsAttestationPolicyConfigMapName`
 * Define `kbsServiceType` if you created a service type other than the default `ClusterIP` service to expose applications within the cluster external traffic. You can specify `NodePort`, `LoadBalancer`, or `ExternalName`.
 
@@ -498,6 +514,7 @@ oc get pods -n trustee-operator-system
 ----
 +
 Expected output:
++
 [source,texinfo,subs="attributes"]
 ----
 NAME                                                   READY   STATUS    RESTARTS   AGE
@@ -521,6 +538,6 @@ Expected output:
 [2024-05-30T13:44:24Z WARN  attestation_service::rvps] No RVPS address provided and will launch a built-in rvps
 [2024-05-30T13:44:24Z INFO  attestation_service::token::simple] No Token Signer key in config file, create an ephemeral key and without CA pubkey cert
 [2024-05-30T13:44:24Z INFO  api_server] Starting HTTPS server at [0.0.0.0:8080]
-[2024-05-30T13:44:24Z INFO  actix_server::builder] starting 12 workers
+[2024-05-30T13:44:24Z INFO  actix_server::builder] starting 4 workers
 [2024-05-30T13:44:24Z INFO  actix_server::server] Tokio runtime found; starting in existing Tokio runtime
 ----
