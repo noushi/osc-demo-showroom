@@ -134,6 +134,7 @@ data:
   AZURE_IMAGE_ID: ""
   PROXY_TIMEOUT: "5m"
   DISABLECVM: "false"
+  ENABLE_SECURE_BOOT: "true"
   AA_KBC_PARAMS: "cc_kbc::https://${TRUSTEE_HOST}"
 EOF
 
