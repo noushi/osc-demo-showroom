@@ -32,7 +32,6 @@
 ** xref:03-deploy-workload.adoc#verify[Verify the pod is in a VM]
 ** xref:03-deploy-workload.adoc#verify-security[Verify the CoCo pod security restrictions]
 ** xref:03-deploy-workload.adoc#example-att[Attestation example]
-
 ** xref:03-deploy-workload.adoc#destroy[Destroy the hello-openshift pod]
 
 * xref:04-conclusion.adoc[6. Conclusion and what's next]
