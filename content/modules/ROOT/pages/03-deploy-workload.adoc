@@ -314,7 +314,7 @@ oc exec -it ocp-cc-pod -- bash
 curl http://127.0.0.1:8006/cdh/resource/default/kbsres1/key1 && echo ""
 ----
 +
-And as expected, the secret is returned succesfully.
+And as expected, the secret is returned successfully.
 +
 [source,texinfo,subs="attributes"]
 ----

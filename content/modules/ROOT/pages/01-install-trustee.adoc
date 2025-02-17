@@ -18,7 +18,7 @@ In other words, the workflow is the following:
 
 . A confidential container is developed in a secure environment. In addition to the traditional development steps, two additional actions are necessary:
 .. The binary/pod image is encrypted with a secure key, which is **not** embedded inside the container.
-.. The container logic is extended to initially perform a `curl http://127.0.0.1:8006/cdh/resource/<path to the Trustee secret>` to fetch the secret from Trustee, assuming attestation was succesful, and decrypt the application/container.
+.. The container logic is extended to initially perform a `curl http://127.0.0.1:8006/cdh/resource/<path to the Trustee secret>` to fetch the secret from Trustee, assuming attestation was successful, and decrypt the application/container.
 . The Trustee operator is installed and configured in a secure environment, and the secure key used to encrypt the pod is loaded into it.
 . In the untrusted cluster, OSC is installed and configured to use CoCo and connect with Trustee.
 . The developed CoCo pod is started. The pod starts in a Confidential VM, which then starts the actual containerized application.
