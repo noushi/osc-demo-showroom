@@ -12,6 +12,7 @@ If you are interested on more demos/POCs that are in progress, here are some int
 * https://www.redhat.com/en/blog/secure-cloud-bursting-leveraging-confidential-computing-peace-mind[Secure cloud bursting: Leveraging confidential computing for peace of mind, window=blank]
 * https://www.redhat.com/en/blog/confidential-containers-fsi-public-cloud[Confidential Containers for Financial Services on Public Cloud, window=blank]
 * https://www.redhat.com/en/blog/introducing-confidential-containers-bare-metal[Introducing confidential containers on bare metal, window=blank]
+* https://events.redhat.com/profile/form/index.cfm?PKformID=0x1232360abcd&sc_cid=7015Y0000048WqmQAE[Confidential Computing 101: online webinar, window=blank] (register to get email recording)
 
 **Thank you for taking the time to explore CoCo!**
 
