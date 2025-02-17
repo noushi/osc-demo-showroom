@@ -64,6 +64,7 @@ io.katacontainers.config.agent.policy: cGFja2FnZSBhZ2VudF9wb2xpY3kKCmRlZmF1bHQgQ
 ----
 +
 And it can be provided to any CoCo pod by adding it as `metadata.annotations`:
++
 [source,sh,role=execute]
 ----
 apiVersion: v1

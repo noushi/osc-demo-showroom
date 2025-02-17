@@ -1,6 +1,6 @@
 ---
 site:
-  title: Openshift sandboxed containers
+  title: Confidential containers
   url: https://redhat-scholars.github.io/course-template
   start_page: modules::index.adoc
 
