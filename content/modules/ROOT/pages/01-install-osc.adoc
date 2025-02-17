@@ -17,6 +17,8 @@ The peer-pods solution extends Red Hat Openshift sandboxed containers (OSC) to r
 
 Together with its full integration with Trustee, and the support of hardware TEE, the OSC operator is capable of offering the **Confidential Containers (CoCo)** technology on ARO.
 
+To summarize, a confidential container on ARO is simply a container running in a Confidential VM backed up by TEE hardware and set up using the peer-pods technology. The Confidential VM runs RHEL and it contains components to automatically connect with Trustee and perform attestation.
+
 After setting up the Trustee operator, in this chapter we are going to set up OSC to enable CoCo.
 
 There are two ways to install the OSC operator:

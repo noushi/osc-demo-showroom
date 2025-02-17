@@ -146,14 +146,14 @@ Azure instance types are explained and listed https://learn.microsoft.com/en-us/
 It is also worth pointing the azure terminology for instances: the pattern is usually `Standard_X{C}{num_cpus}{a or e}xx_vx` where `C` stands for **Confidential**, `a` for CPUs using **AMD SEV/SNP** technology, and `e` for CPUs using **Intel TDX** technology. Therefore `Standard_DC8_es_v5` is a confidential instance with 8 Intel CPUs using TDX to provide data in use confidentiality.
 
 For this example, we are going to deploy AMD cpus, because they are available in all regions. If you want to deploy a TDX instance, check the region availability (usually `northeurope` is a good choice) and deploy a new workshop in that region.
-+
+
 [source,sh,role=execute]
 ----
 oc apply -f pp-cm.yaml
 ----
-+
+
 NOTE: As you might have noticed, `AZURE_IMAGE_ID` is purposefully left empty. It will be filled in automatically by a Job created by the operator later.
-+
+
 [NOTE]
 ====
 If you later update the peer pods config map, you must restart the peerpodconfig-ctrl-caa-daemon daemonset to apply the changes.
@@ -167,7 +167,7 @@ Keep in mind that restarting the daemonset recreates the peer pods, it does not 
 
 [#pp-key]
 == Create the peer-pods SSH key
-This key is also useful to enter the pod VM, inspect it and debug. An SSH key is required to create Azure VMs.
+When CoCo mode is disabled (so the VM is not confidential), this key is also useful to enter the pod VM, inspect it and debug. In CoCo, ssh into the VM is disabled by default. We need to create it anyways because an SSH key is required to create Azure VMs, but as we will see, it will be discarded immediately.
 
 . Create an ssh key:
 +

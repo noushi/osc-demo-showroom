@@ -11,6 +11,7 @@ We will show how to set up the Trustee and OSC operator and run a simple hello-o
 The goal of this workshop is to provide the user not only an environment and documentation to test CoCo, but also provide additional explanations on the design choices behind some options and the benefit they bring to the overall user experience. CoCo is designed to bring **confidential computing** at kubernetes level, making it **as simple as possible** while preserving all security benefits that confidential computing brings.
 
 Before starting this workshop, we suggest to read the following blogposts to get a background on CoCo:
+
 * https://www.redhat.com/en/blog/what-confidential-containers-project[What is the Confidential Containers project?, window=blank]
 * https://www.redhat.com/en/blog/exploring-openshift-confidential-containers-solution[Exploring the OpenShift confidential containers solution, window=blank]
 * https://www.redhat.com/en/blog/use-cases-and-ecosystem-openshift-confidential-containers[Use cases and ecosystem for OpenShift confidential containers, window=blank]
@@ -31,3 +32,5 @@ All blogposts are under this https://www.redhat.com/en/blog/learn-about-confiden
 * Log into azure CLI: `az login --service-principal -u {azure_service_principal_id} -p {azure_service_principal_password} --tenant {azure_tenant_id}`
 * Export the `AZURE_RESOURCE_GROUP` variable. It will needed when setting up the operator:
 `export AZURE_RESOURCE_GROUP={azure_resource_group}`
+
+**Next:** This workshop follows a different approach from the official documentation, and in order to set up the whole system for CoCo only once, we recommend starting with Trustee installation and configuration. Only then we can configure OSC to interface directly with Trustee.
