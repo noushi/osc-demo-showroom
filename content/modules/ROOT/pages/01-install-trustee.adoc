@@ -77,7 +77,7 @@ TIP: If you don't want to copy-paste, there is a xref:01-install-osc.adoc#script
 
 . Create and apply a `Namespace.yaml` manifest file:
 +
-[source,yaml]
+[source,yaml,role=copy]
 ----
 cat > Namespace.yaml <<EOF
 apiVersion: v1
