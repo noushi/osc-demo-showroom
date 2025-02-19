@@ -244,7 +244,7 @@ After `security-policy-config.json` is created, create the secret with the follo
 
 [source,sh,role=execute]
 ----
-oc apply secret generic security-policy \
+oc create secret generic security-policy \
   --from-file=osc=./security-policy-config.json \
   -n trustee-operator-system
 ----
