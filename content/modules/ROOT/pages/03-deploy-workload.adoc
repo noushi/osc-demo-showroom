@@ -297,7 +297,7 @@ Wait that the pod is created.
 +
 [source,sh,role=execute]
 ----
-watch oc get pods/hello-openshift
+watch oc get pods/ocp-cc-pod
 ----
 +
 The pod is ready when the `STATUS` is in `Running`.
@@ -326,7 +326,7 @@ Confidential_Secret!
 +
 IMPORTANT: Notice how the `curl` call is connecting with `http://127.0.0.1`. This is done on purpose, because the CoCo technology is designed to avoid hardcoding any special logic into the pod application. This means that a confidential container doesn't have to know where the Trustee lives, what is its ip, or even care about the attestation report. This is provided in the OSC `AA_KBC_PARAMS` given in the xref:02-configure-osc.adoc#pp-cm[peer-pods configmap]. Such url is then forwarded to the local `Trustee agent` running in side the CoCo Confidential VM automatically, so all the CoCo pod application has to do is communicate **locally** (therefore `http` is enough) with the local `Trustee agent` and ask for the path representing the secret it would like to get, in this case `kbsres1/key1`. The `Trustee agent` will then take care of collecting hardware & software attestation proofs, create an attestation report, enstablish an `https` connection with the remote attester `Trustee operator`, and then perform the attestation process.
 
-. It is also possible to inspect Trustee logs to understand how the process worked.
+. It is also possible to inspect Trustee logs to understand how the process worked. Exit from the pod and run the following:
 +
 [source,sh,role=execute]
 ----

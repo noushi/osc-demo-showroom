@@ -195,5 +195,5 @@ EOF
 Ensure that the Operator is correctly installed by running the following command and checking that the `PHASE` is in `Succeeded` state:
 [source,sh,role=execute]
 ----
-oc get csv -n trustee-operator-system
+watch oc get csv -n trustee-operator-system
 ----
