@@ -89,6 +89,8 @@ oc apply -f cc-fg.yaml
 +
 [source,sh,role=execute]
 ----
+echo ""
+
 # Get the ARO created RG
 ARO_RESOURCE_GROUP=$(oc get infrastructure/cluster -o jsonpath='{.status.platformStatus.azure.resourceGroupName}')
 
