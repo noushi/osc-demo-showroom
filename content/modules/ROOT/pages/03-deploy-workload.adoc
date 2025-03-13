@@ -164,28 +164,15 @@ curl ${APP_URL}
 == Verify that the pod is running in a VM
 How to be sure that all what we did so far is actually running in a VM? There are several ways to check this.
 
-. Via ARO web UI.
-  * Go to the https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines/subscriptionId/{azure_subscription}[Azure VM web console, window=blank] and login. Insert the email associated with your RHDP account and proceed with login.
-  * In the `Subscription` filter, make sure {aro_sandbox_name} is selected. In this example, it is `pool-01-344`.
-+
-image::06-subscription.png[link=self, window=blank]
-  * Look at the various VMs. You will see there are:
-    ** 3 masters VM (called _aro-cluster-{guid}-<random chars>-master-0/1/2_)
-    ** 3 workers VM (called _aro-cluster-{guid}-<random chars>-worker-<region>-<random chars>_)
-    ** 1 _bastion-{guid}_ VM, used internally by the workshop infrastructure. The console on the right is actually connected to this VM, and all commands are being performed from here.
-    ** 1 **podvm-hello-openshift-<random chars>**. This is where the `hello-openshift` pod is actually running! Note also how the instance tyoe under `Size` column at the right side is not the same as the other VMs. It is indeed `Standard_D8as_v5`, as specified in the OSC xref:02-configure-osc.adoc#pp-cm[ConfigMap].
-+
-image::07-hello.png[link=self, window=blank]
+We can check via command line using `az`.
 
-. Via command line using `az`. Result and observations are same as the web UI.
-+
 [source,sh,role=execute]
 ----
 az vm list --query "[].{Name:name, VMSize:hardwareProfile.vmSize}" --output table
 ----
-+
+
 Example output:
-+
+
 [source,texinfo,subs="attributes"]
 ----
 Name                                          VMSize
@@ -199,6 +186,12 @@ aro-cluster-q5hqf-xs7zb-worker-eastus3-6dzt4  Standard_D4s_v3
 podvm-hello-openshift-c0311387                Standard_D8as_v5
 bastion-q5hqf                                 Standard_DS1_v2
 ----
+
+Look at the various VMs. You will see there are:
+* 3 masters VM (called _aro-cluster-{guid}-<random chars>-master-0/1/2_)
+* 3 workers VM (called _aro-cluster-{guid}-<random chars>-worker-<region>-<random chars>_)
+* 1 _bastion-{guid}_ VM, used internally by the workshop infrastructure. The console on the right is actually connected to this VM, and all commands are being performed from here.
+* 1 **podvm-hello-openshift-<random chars>**. This is where the `hello-openshift` pod is actually running! Note also how the instance tyoe under `Size` column at the right side is not the same as the other VMs. It is indeed `Standard_D8as_v5`, as specified in the OSC xref:02-configure-osc.adoc#pp-cm[ConfigMap].
 
 [#verify-security]
 == Verify the CoCo pod security restrictions
