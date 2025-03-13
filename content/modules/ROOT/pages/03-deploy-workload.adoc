@@ -150,7 +150,7 @@ cat default-osc-policy.yaml
 +
 The main two switches in the policy are `ReadStreamRequest` and `ExecProcessRequest`. The former enables logs, and the latter exec. Note that if `ExecProcessRequest` is enabled, but `ReadStreamRequest` is not, the user can still inject commands, but won't be able to see the output. **This does not mean the command won't be executed**.
 +
-This policy shows that is also possible to define some specific `exec` commands by defining `ExecProcessRequest if {}` and `policy_data := {}` functions and leaving `ExecProcessRequest` to `false`. In this case it only allows the command `curl http://127.0.0.1:8006/cdh/resource/default/kbsres1/key1`. What this means is that the defined command will work, but **any** other command will fail. Even `oc exec -it pods/your_pod -- curl` will not work.
+This policy shows that is also possible to define some specific `exec` commands by defining `ExecProcessRequest if {}` and `policy_data := {}` functions and leaving `ExecProcessRequest` to `false`. In this case it only allows the command `curl http://127.0.0.1:8006/cdh/resource/default/kbsres1/key1`. What this means is that the defined command will work, but **any** other command will fail. Even `oc exec -it pods/your_pod -- curl http://127.0.0.1:8006/cdh/resource/default/kbsres1/key2` will not work.
 +
 This is extremely useful if the pod has to provide restricted access to an untrusted actor (admin, developer) to for example debug the application logic inside the confidential container.
 +
@@ -392,7 +392,7 @@ IMPORTANT: Notice how the `curl` call is connecting with `http://127.0.0.1`. Thi
 [source,sh,role=execute]
 ----
 [azure@bastion ~]# oc exec -it ocp-cc-pod -- bash
-error: Internal error occurred: error executing command in container: cannot enter container 8c0001fb69f7b8e728a3ccc8ad51d362f284f17450765f895db91dce7fc00413, with err rpc error: code = PermissionDenied desc = "ExecProcessRequest is blocked by policy: ": unknown
+error: Internal error occurred: error executing command in container: cannot enter container d60d9d18412d0e4d9bb2e29975b420e4535bac9d966452bc58775ba847cb940c, with err rpc error: code = PermissionDenied desc = "ExecProcessRequest is blocked by policy: ": unknown
 ----
 
 . It is also possible to inspect Trustee logs to understand how the process worked.
