@@ -15,9 +15,9 @@ oc create route edge --service=kbs-service --port kbs-port \
   -n trustee-operator-system
 ----
 +
-NOTE: Currently, only a route with a valid CA-signed certificate is supported. You cannot use a route with self-signed certificate.
+NOTE: Currently, only a route with a valid CA-signed certificate is supported. You cannot use a route with self-signed certificate. In ARO, the above route works well. If you are trying this guide from an Azure self managed cluster, there is the `NodePort` option available, which consists of adding `kbsServiceType: NodePort` under `spec` in the xref:02-configure-trustee.adoc#trustee-kbsconfig[Trustee KbsConfig] (restart trustee deployment), and change `AA_KBC_PARAMS` in xref:02-configure-osc.adoc#pp-cm[peer-pods ConfigMap] to be `cc_kbc::http://your_worker_node_where_trustee_is_ip:kbs_service_nodeport`. This is not a suggested approach for production and just useful for trying things in a single cluster.
 
-. Set the TRUSTEE_HOST variable. This variable will be useful later when we set the xref:02-configure-osc.adoc#pp-cm[peer-pods ConfigMap]
+. Set the `TRUSTEE_HOST` variable. This variable will be useful later when we set the xref:02-configure-osc.adoc#pp-cm[peer-pods ConfigMap]
 +
 [source,sh,role=execute]
 ----
