@@ -223,23 +223,7 @@ error: Internal error occurred: error executing command in container: cannot ent
 
 . Check that ssh'ing into the pod Confidential VM is disabled.
 +
-There are multiple ways to accomplish this, the easies is through the Azure web ui:
-+
-.. Go to the https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines/subscriptionId/{azure_subscription}[Azure VM web console, window=blank] and login. Insert the email associated with your RHDP account and proceed with login. In the `Subscription` filter, make sure {aro_sandbox_name} is selected. In this example, it is `pool-01-344`.
-
-.. Click on `podvm-hello-openshift-<random_char>` VM, then on the `Connect` side bar menu, and use any of the suggested way to connect with the VM, for example `Serial console` (hidden under `More ways to connect (3)`).
-
-.. If you try with `Serial console`, the following error will appear:
-+
-[source,texinfo,subs="attributes"]
-----
-For more information on the Azure Serial Console, see <https://aka.ms/serialconsolelinux>.
-
-Preparing console connection to podvm-hello-openshift-c0311387
-  The serial console connection to the VM encountered an error: 'ERR_BAD_REQUEST'
-
- (403) - Request failed with status code 403
-----
+There are multiple ways to accomplish this, for example when xref:02-configure-osc.adoc#pp-key[setting up the ssh key in OSC]. If `id_rsa` is not destroyed, it could be used to try and ssh into the VM. However, such attempt will fail, as the VM does not accept any SSH incoming connection.
 
 [#example-att]
 == Attestation example
