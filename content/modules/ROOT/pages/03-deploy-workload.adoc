@@ -223,7 +223,7 @@ error: Internal error occurred: error executing command in container: cannot ent
 
 . Check that ssh'ing into the pod Confidential VM is disabled.
 +
-There are multiple ways to accomplish this, for example when xref:02-configure-osc.adoc#pp-key[setting up the ssh key in OSC]. If `id_rsa` is not destroyed, it could be used to try and ssh into the VM. However, such attempt will fail, as the VM does not accept any SSH incoming connection.
+There are multiple ways to accomplish this, for example using the ssh key created when xref:02-configure-osc.adoc#pp-key[setting up the ssh key in OSC]. If `id_rsa` is not destroyed, it could be used to try and ssh into the VM. However, such attempt will fail, as the VM does not accept any SSH incoming connection.
 
 [#example-att]
 == Attestation example
