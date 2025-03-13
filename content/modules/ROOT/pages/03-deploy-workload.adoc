@@ -3,7 +3,7 @@
 Now that the everything is ready, we can run a sample workload.
 Let's first see what we can and must add into the pod yaml to make it run in a VM.
 
-NOTE: Because of CPU Quota limitations of this ARO subscription, and since each CoCo runs in a Confidential VM, you are just allowed to get one single CoCo at time. Trying to deploy a second one will result in failure and container stuck in `ContainerCreating` state.
+NOTE: Because of CPU Quota limitations of this ARO subscription, and since each CoCo runs in a Confidential VM, you are just allowed to get **one single CoCo pod** at time. Trying to deploy a second one will result in failure and container stuck in `ContainerCreating` state.
 
 In this section, we will show you two simple examples of how to respectively enable CoCo in a traditional pod and how to perform attestation. Please refer to the xref:04-conclusion.adoc[next section] to learn about more complex examples with AI, gpus, and so on.
 
@@ -188,6 +188,7 @@ bastion-q5hqf                                 Standard_DS1_v2
 ----
 
 Look at the various VMs. You will see there are:
+
 * 3 masters VM (called _aro-cluster-{guid}-<random chars>-master-0/1/2_)
 * 3 workers VM (called _aro-cluster-{guid}-<random chars>-worker-<region>-<random chars>_)
 * 1 _bastion-{guid}_ VM, used internally by the workshop infrastructure. The console on the right is actually connected to this VM, and all commands are being performed from here.
