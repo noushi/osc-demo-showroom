@@ -206,6 +206,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: hello-openshift-service
+  namespace: default
   labels:
     app: hello-openshift
 spec:
@@ -222,6 +223,14 @@ cat sample-openshift.yaml
 ----
 oc apply -f sample-openshift.yaml
 ----
+
+. Switch to the `default` namespace
++
+[source,sh,role=execute]
+----
+oc project default
+----
++
 
 . Wait that the pod is created.
 +
@@ -322,6 +331,14 @@ In this example you will try how the attestation mechanism works, and how easy i
 IMPORTANT: If you are following this guide in order, make sure that the `hello-openshift` pod has been fully terminated before running this next one, otherwise you will run into quota issues related to the Azure subscription.
 
 The `ocp-cc-pod` by itself is simply a CoCo pod that sleeps for an hour and then dies. The particularity is that has a more relaxed Kata policy, exactly the same shown in xref:03-deploy-worload.adoc#optional-options[the options section]. This policy allows us to exec into it and be able to manually trigger attestation to fetch a secret. No other command is allowed.
+
+. Switch to the `default` namespace if not done already
++
+[source,sh,role=execute]
+----
+oc project default
+----
++
 
 . Create `verification-pod.yaml`:
 +
